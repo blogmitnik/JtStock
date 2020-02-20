@@ -1,0 +1,18 @@
+- build_type = params[:build].nil? ? "" : " (" + params[:build].to_s.upcase + ")"
+
+- navigation_add 'Modules', my_posts_path
+- navigation_add @post.title + build_type, my_post_path(@post)
+
+%h2.page-header
+  = @post.title + build_type
+  %small 指數分析模組
+
+.form-group
+  .row
+    .col-md-12
+      #yield-report
+        / .section_topic
+        /   %h3.image_title
+        /     %img{:alt => "Topic", :src => "/assets/topic_title.png"}
+        /     %p= @post.title + build_type
+        = render :partial => "shared/yield_report"

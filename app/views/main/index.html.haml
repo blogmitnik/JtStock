@@ -1,0 +1,17 @@
+- navigation_add 'Welcome', "/"
+
+.media
+  .media-body
+    .col-md-8.col-md-offset-2
+      .welcome
+        %h2 歡迎
+        - unless user_signed_in?
+          %p
+            您可以
+            %a{:href => "/users/sign_in"} 登入用戶
+            或
+            %a{:href => "/users/sign_up"} 註冊帳戶
+        - else
+          %p
+            你好！
+        =image_tag "star_banner.png", class: 'img-responsive'

@@ -1,0 +1,13 @@
+%button.btn.btn-basecamp.btn-sm.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :type => "button"}
+  %span.glyphicon.glyphicon-cog{"aria-hidden" => "true"}
+  功能模組
+  %span.caret
+  %span.sr-only Toggle Dropdown
+%ul.dropdown-menu.build
+  - @posts.each do |post|
+    %li
+      %a{:href => my_post_path(post)}
+        = post.title
+
+:javascript
+  $('.dropdown-toggle').dropdown();

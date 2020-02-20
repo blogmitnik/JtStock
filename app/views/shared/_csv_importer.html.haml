@@ -1,0 +1,13 @@
+#importCSV.modal{"aria-labelledby" => "myModalLabel", :role => "dialog", :tabindex => "-1", "data-backdrop" => "true", "data-keyboard" => "false"}
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+          %span{"aria-hidden" => "true"} &times;
+        %h4.modal-title 匯入CSV資料
+      .modal-body
+        %span.glyphicon.glyphicon-download-alt
+        %strong 請從本地端目錄選取CSV文件
+        %p.text-danger 請選取CSV文件，或是包含所有CSV文件的整個目錄 (後者僅支持Chrome)
+        #import-yield-report
+          = render :partial => "shared/import_form"

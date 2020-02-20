@@ -1,0 +1,121 @@
+- navigation_add 'Modules', my_posts_path
+
+%h2.page-header
+  Modules
+  %small
+    功能模組
+%p.lead 請從下面清單進入中一個模組
+
+.row
+  .build-lists
+    .col-md-8.col-md-offset-2
+      .panel.panel-custom.panel-default
+        .panel-body
+          .pull-right
+            .table
+              .btn-group
+                %button.btn.btn-primary{"data-toggle" => "modal", href: "#importCSV"}
+                  %span.glyphicon.glyphicon-cloud-upload{"aria-hidden" => "true"}
+                  匯入CSV資料
+
+          .table-container
+            %table.table.table-hover.table-filter
+              %tbody
+                - if @posts.count > 0
+                  - @posts.each do |post|
+                    %tr{id: "build_row_#{post.id}"}
+                      %td{style: "vertical-align: middle;"}
+                        .ckbox
+                          = check_box_tag "post_ids[]", post.id, false, id: "post_ids_#{post.id}"
+                          %label{for: "post_ids_#{post.id}"}
+                      %td{style: "vertical-align: middle;"}
+                        %a.star{href: "javascript:;", "data-toggle" => "tooltip", title: "No function yet"}
+                          %i.glyphicon.glyphicon-star
+                      %td
+                        .media
+                          .media-body
+                            %span.media-meta.pull-right
+                              此模組於
+                              = post.created_at.to_date.to_formatted_s(:long)
+                              建立
+                            %h4.title
+                              = link_to post.title, my_post_path(post)
+                              %span#delete-build.pull-right.dont_show
+                                = link_to '(刪除模組)', '#', class: "text-danger", id: "delete-a-build", "data-build-name" => "#{post.title}", "data-build-id" => "#{post.id}"
+                              %span#manage-files.pull-right.dont_show
+                                = link_to '(管理文件)', my_post_yield_files_path(post)
+                            %p.summary
+                              - if post.reports.count > 0
+                                = @files_count
+                                個 CSV 文件，包含共
+                                = post.reports.count.to_i
+                                筆資料
+                              - else
+                                沒有資料
+                - else
+                  %tr
+                    %td
+                      沒有以建立的模組 :(
+
+= render :partial => "shared/csv_importer"
+
+:javascript
+  $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+
+    $('.star').on('click', function () {
+      $(this).toggleClass('star-checked');
+    });
+
+    $('.ckbox label').on('click', function () {
+      $(this).parents('tr').toggleClass('selected');
+      var checked = $(this).find("input:checkbox").is(":checked");
+      if(checked){
+        $(this).parents('tr').find('#delete-build').removeClass('dont_show');
+        $(this).parents('tr').find('#manage-files').removeClass('dont_show');
+      }
+      else {
+        $(this).parents('tr').find('#delete-build').toggleClass('dont_show');
+        $(this).parents('tr').find('#manage-files').toggleClass('dont_show');
+      }
+    });
+  });
+
+  $("a#delete-a-build").click(function() {
+    var buildName = $(this).attr("data-build-name");
+    var buildId = $(this).attr("data-build-id");
+    deleteBuild(buildName, buildId);
+  });
+
+  function deleteBuild(buildName, buildId) {
+    swal({
+      title: "Are you sure?", 
+      text: "You want to delete " + buildName, 
+      type: "warning",
+      showCancelButton: true,
+      closeOnConfirm: false,
+      confirmButtonClass: "btn-warning",
+      confirmButtonText: "Delete it!",
+      closeOnConfirm: false,
+      showLoaderOnConfirm: true
+    }, function() {
+      $.ajax({
+        url: "/my_posts/" + buildId,
+        type: "DELETE",
+        dataType: 'script'
+      })
+      .done(function(data) {
+        swal("成功刪除", buildName + " 模組，以及所有資料已成功清除！", "success");
+        $("#build_row_" + buildId).fadeOut();
+
+        $('button.confirm').click(function() {
+          setTimeout(function(){
+            $(location).attr('href', "/my_posts")
+          }, 200);
+        });
+      })
+      .error(function(data) {
+        swal("發生未知錯誤！", "抱歉，我們無法連接到伺服器！", "error");
+      });
+    });
+  }

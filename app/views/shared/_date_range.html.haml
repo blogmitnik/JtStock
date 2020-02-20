@@ -1,0 +1,39 @@
+- build_type = params[:build].nil? ? "" : " (" + params[:build].to_s.upcase + ")"
+
+%h4 按日期比較各分類指數資料
+
+- if @reports_for_cart.count > 0
+  - if params[:date1].present? || params[:date2].present? || params[:date3].present?
+    / Multiple Dates Search
+    %span.glyphicon.glyphicon-star
+    %strong 當前顯示
+    - @dates_selected.each do |date|
+      .badge
+        = date.published_at.strftime('%Y-%m-%d')
+    %strong 的資料
+  - else
+    / Date Range Search
+    %span.glyphicon.glyphicon-star
+    %strong 當前顯示
+    .badge
+      = @reports_for_cart.minimum('published_at').strftime('%Y-%m-%d')
+      - unless @reports_for_cart.first.published_at == @reports_for_cart.last.published_at
+        到
+        = @reports_for_cart.maximum('published_at').strftime('%Y-%m-%d')
+    %strong 的資料
+- else
+  %span.glyphicon.glyphicon-exclamation-sign
+  沒有資料
+
+- if params[:date_range].present?
+  - start_year = params[:date_range][0, 4]
+  - start_month = params[:date_range][5, 2].to_i < 10 ? params[:date_range][6, 1].to_i - 1 : params[:date_range][5, 2].to_i - 1
+  - start_day = params[:date_range][8, 2].to_i < 10 ? params[:date_range][9, 1].to_i : params[:date_range][8, 2].to_i
+
+  - end_year = params[:date_range][13, 4]
+  - end_month = params[:date_range][18, 2].to_i < 10 ? params[:date_range][19, 1].to_i - 1 : params[:date_range][18, 2].to_i - 1
+  - end_day = params[:date_range][21, 2].to_i < 10 ? params[:date_range][22, 1].to_i : params[:date_range][21, 2].to_i
+
+  #hidden-date-range{"data-date-from" => params[:date_range][0, 10], "data-date-to" => params[:date_range][13, 10], "data-year-from" => start_year, "data-month-from" => start_month, "data-day-from" => start_day, "data-year-to" => end_year, "data-month-to" => end_month, "data-day-to" => end_day}
+- elsif params[:date1].present? || params[:date2].present? || params[:date3].present?
+  #hidden-selected-dates{"data-date-count" => @dates_selected_count} 

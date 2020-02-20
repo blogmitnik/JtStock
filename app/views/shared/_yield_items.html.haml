@@ -1,0 +1,89 @@
+- if @reports.count > 0
+  .table-responsive.record_lists
+    #report_lists_filter
+      - if params[:commit].present? && params[:commit] == "Search" && @distinct_date.count > 1
+        #tab.btn-group{"data-toggle" => "buttons-radio"}
+          %a.btn.btn-large.btn-default.summarize-dates.active{"aria-controls" => "date-summarize", "data-toggle" => "tab", :href => "#date-summarize", :role => "tab"}
+            %span.glyphicon.glyphicon-th-large
+            按日期比較
+          %a.btn.btn-large.btn-default.summarize-indexes{"aria-controls" => "index-summarize", "data-toggle" => "tab", :href => "#index-summarize", :role => "tab"}
+            %span.glyphicon.glyphicon-th-list
+            按指數總覽
+
+          / - if params[:data_type].nil?
+          /   %a.btn.btn-large.btn-default.active{:href => url_for(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :date => params[:date], :build => params[:build]), "data-remote" => "true"}
+          /     %span.glyphicon.glyphicon-calendar
+          /     按日期區分
+          /   %a.btn.btn-large.btn-default{:class => active_class(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :build => params[:build], :data_type => 'date_summarize', :date => params[:date]), :href => url_for(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :date => params[:date], :build => params[:build], :data_type => 'date_summarize'), "data-remote" => "true"} 
+          /     %span.glyphicon.glyphicon-time
+          /     按指數總覽
+          / -else
+          /   %a.btn.btn-large.btn-default{:class => active_class(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :data_type => 'latest_hour', :date => params[:date], :build => params[:build]), :href => url_for(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :date => params[:date], :build => params[:build]), "data-remote" => "true"}
+          /     %span.glyphicon.glyphicon-calendar
+          /     按日期區分
+          /   %a.btn.btn-large.btn-default{:class => active_class(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :data_type => 'date_summarize', :date => params[:date], :build => params[:build]), :href => url_for(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :date => params[:date], :build => params[:build], :data_type => 'date_summarize'), "data-remote" => "true"}
+          /     %span.glyphicon.glyphicon-time
+          /     按指數總覽
+
+      %button.btn.btn-default{"data-toggle" => "modal", :href => "#importCSV"}
+        %span.glyphicon.glyphicon-cloud-upload{"aria-hidden" => "true"}
+        匯入CSV資料
+
+    = render :partial => "shared/items", :object => @reports
+    / - if params[:commit].present? && params[:commit] == "Search"
+    /   .tab-content
+    /     #date-summarize.tab-pane.fade.in.active{:role => "tabpanel"}
+    /       = render :partial => "shared/items", :object => @reports
+    /     #index-summarize.tab-pane.fade{:role => "tabpanel"}
+    /       = render :partial => "shared/items_grouped", :object => @reports
+    / - else
+    /   = render :partial => "shared/items", :object => @reports
+- else
+  .well.record_lists{:style => "margin-top: 10px;"}
+    .blankslate.text-center
+      %h3 沒有資料
+      %p 抱歉，您選擇的日期中找不到任何資料 :(
+
+:javascript
+  $(document).ready(function(){
+
+    $(window).scroll(function () {
+      more_reports_url = $('#paginator a[rel=next]').attr('href');
+      if (more_reports_url && $(window).scrollTop() > $(document).height() - $(window).height() - 200) {
+        $('#paginator').html('<div class="loading">正在載入資料...</div>');
+        $.getScript(more_reports_url);
+      }
+      if ($(this).scrollTop() > 2500) {
+        $('#back-to-top').fadeIn();
+      }
+      else {
+        $('#back-to-top').fadeOut();
+      }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+      $('#back-to-top').tooltip('hide');
+      $('body,html').animate({
+        scrollTop: 0
+      }, 800);
+      return false;
+    });    
+    $('#back-to-top').tooltip('show');
+    // Click the Load more report button
+    $('#paginator').click(function () {
+      $('#paginator').html('<div class="loading">Loading reports...</div>');
+    });
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (event) {
+    });
+
+    $('a.summarize-dates').click(function(){
+      $('.summarize_table_index').hide();
+      $('.summarize_table_date').show();
+    })
+
+    $('a.summarize-indexes').click(function(){
+      $('.summarize_table_index').show();
+      $('.summarize_table_date').hide();
+    })
+  });

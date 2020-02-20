@@ -1,0 +1,403 @@
+- build_type = params[:build].nil? ? "" : " (" + params[:build].to_s.upcase + ")"
+
+- if params[:commit].present? && params[:commit] == "Search" && @distinct_date.count > 1
+  %table#report_lists.table.table-small-font.table-hover.table-striped.table-condensed.dt-responsive.infinite-table{:style => "width:100%;"}
+    %thead
+      %tr.summarize_table_index
+        %th 順序
+        %th 分類指數名稱
+        %th 成交股數
+        %th 成交金額
+        %th 成交筆數
+        %th 漲跌指數
+        %th 股數百分比(%)
+        %th 成交百分比(%)
+        %th 資料日期
+
+      %tr.summarize_table_date
+        %th 順序
+        %th 分類指數名稱
+        - @distinct_date.each do |date|
+          %th 
+            = date.published_at.strftime('%Y-%m-%d').to_s
+            股數
+          %th 
+            = date.published_at.strftime('%Y-%m-%d').to_s
+            成交
+        - if @distinct_date.count == 2
+          %th 
+            \- 股數
+          %th
+            \- 成交
+        %th 備註
+      
+    %tbody
+      - @reports.each do |report|
+        %tr.summarize_table_index.data-content
+          %td{:style => "vertical-align: middle;"}
+            = report.station_id
+
+          %td{:style => "vertical-align: middle;"}
+            %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down"}
+              = report.station_name
+
+          %td{:style => "vertical-align: middle;"}
+            = report.traded_shares_num
+
+          %td{:style => "vertical-align: middle;"}
+            = report.turnover
+
+          %td{:style => "vertical-align: middle;"}
+            = report.total_transactions
+
+          %td{:style => "vertical-align: middle;"}
+            =render_up_down(report.advance_decline_idx)
+
+          %td{:style => "vertical-align: middle;"}
+            = report.shares_percentage
+
+          %td{:style => "vertical-align: middle;"}
+            = report.closing_percentage
+
+          %td.date{:style => "vertical-align: middle;"}
+            %span.glyphicon.glyphicon-time
+            = report.published_at.to_date.to_formatted_s(:long)
+
+      - @reports_summarize.each_with_index do |(idx, data), index|
+        %tr.summarize_table_date
+          %td{:style => "vertical-align: middle;"}
+            = index + 1
+          %td{:style => "vertical-align: middle;"}
+            %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down"}
+              = idx
+          - data.each do |d|
+            %td{:style => "vertical-align: middle;"}
+              = d.shares_percentage
+            %td{:style => "vertical-align: middle;"}
+              = d.closing_percentage
+          - if @distinct_date.count == 2
+            %td{:style => "vertical-align: middle;"}
+            %td{:style => "vertical-align: middle;"}
+              
+          %td{:style => "vertical-align: middle;"}
+
+  :javascript
+    jQuery(function() {
+      initPage();
+      $('.summarize_table_date').show();
+      $('.summarize_table_index').hide();
+
+      var selectDateCount = $("#hidden-selected-dates").attr("data-date-count");
+      if (parseInt(selectDateCount)===3) {
+        $("tr.data-content:nth-child(8n+1), tr.data-content:nth-child(8n+2), tr.data-content:nth-child(8n+3), tr.data-content:nth-child(8n+4)").css("background-color", "#eee");
+
+        $("tr.data-content:nth-child(8n+5), tr.data-content:nth-child(8n+6), tr.data-content:nth-child(8n+7), tr.data-content:nth-child(8n+8)").css("background-color", "#fff");
+      }
+      else if (parseInt(selectDateCount)===2) {
+        $("tr.data-content:nth-child(6n+1), tr.data-content:nth-child(6n+2), tr.data-content:nth-child(6n+3)").css("background-color", "#eee");
+
+        $("tr.data-content:nth-child(6n+4), tr.data-content:nth-child(6n+5), tr.data-content:nth-child(6n+6)").css("background-color", "#fff");
+      }
+    });
+
+    $(window).bind('page:load', function() {
+      initPage();
+    });
+
+    function initPage() {
+      // Bind progress buttons and simulate loading progress
+      //Ladda.bind( '#report_lists button', { timeout: 2000 } );
+      Ladda.bind( '#report_lists button', {
+        callback: function( instance ) {
+          var progress = 0;
+          var interval = setInterval( function() {
+            progress = Math.min( progress + Math.random() * 0.1, 1 );
+            instance.setProgress( progress );
+
+            if( progress === 1 ) {
+              instance.stop();
+              clearInterval( interval );
+            }
+          }, 200 );
+        }
+      });
+
+      // hide spinner
+      $(".sk-three-bounce").hide();
+
+      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="popover"]').popover();
+      $('.dropdown-toggle').dropdown();
+
+      $('.table-responsive').responsiveTable({
+        pattern: 'priority-columns',
+        addFocusBtn: false
+      });
+
+      $("#report_lists").dataTable({
+        retrieve: true,
+        destroy: true,
+        responsive: true,
+        paging: false,
+        searching: false,
+        info: false,
+        lengthChange: false,
+        dom: 'Bfrtip',
+        fixedHeader: {
+          header: false,
+          footer: false
+        },
+        buttons: [
+          {
+            extend: 'print',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-print"></span> Print',
+            titleAttr: 'Print'
+          },
+          {
+            extend: 'csvHtml5',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-export"></span> CSV',
+            titleAttr: 'Export to CSV'
+          },
+          {
+            extend: 'pdfHtml5',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-export"></span> PDF',
+            titleAttr: 'Export to PDF',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+          }
+        ],
+        columns: [
+          {
+            width: "null",
+            orderable: true,
+            searchable: false,
+            responsivePriority: 1
+          }, {
+            width: "null",
+            orderable: false,
+            searchable: false,
+            responsivePriority: 2
+          }, {
+            width: "null",
+            className: "row_config",
+            orderable: true,
+            searchable: false,
+            responsivePriority: 3
+          }, {
+            width: "null",
+            className: "row_config",
+            orderable: true,
+            searchable: false,
+            responsivePriority: 4
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 5
+          }, {
+            width: "null",
+            className: "center",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 6
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 7
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 8
+          }, {
+            width: "null",
+            searchable: false,
+            orderable: false,
+            responsivePriority: 9
+          }
+        ]
+      });
+    }
+- else
+  %table#report_lists.table.table-small-font.table-hover.table-striped.table-condensed.dt-responsive.infinite-table{:style => "width:100%;"}
+    %thead
+      %tr
+        %th 順序
+        %th 分類指數名稱
+        %th 成交股數
+        %th 成交金額
+        %th 成交筆數
+        %th 漲跌指數
+        %th 股數百分比(%)
+        %th 成交百分比(%)
+        %th 資料日期
+    %tbody
+      - @reports.each do |report|
+        %tr.data-content
+          %td{:style => "vertical-align: middle;"}
+            = report.station_id
+
+          %td{:style => "vertical-align: middle;"}
+            %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down"}
+              = report.station_name
+
+          %td{:style => "vertical-align: middle;"}
+            = report.traded_shares_num
+
+          %td{:style => "vertical-align: middle;"}
+            = report.turnover
+
+          %td{:style => "vertical-align: middle;"}
+            = report.total_transactions
+
+          %td{:style => "vertical-align: middle;"}
+            =render_up_down(report.advance_decline_idx)
+
+          %td{:style => "vertical-align: middle;"}
+            = report.shares_percentage
+
+          %td{:style => "vertical-align: middle;"}
+            = report.closing_percentage
+
+          %td.date{:style => "vertical-align: middle;"}
+            %span.glyphicon.glyphicon-time
+            = report.published_at.to_date.to_formatted_s(:long)
+
+  :javascript
+    jQuery(function() {
+      initPage();
+      $('#report_lists_filter input[type=search]').attr("placeholder", "以指數名稱過濾");
+    });
+
+    $(window).bind('page:load', function() {
+      initPage();
+    });
+
+    function initPage() {
+      // Bind progress buttons and simulate loading progress
+      //Ladda.bind( '#report_lists button', { timeout: 2000 } );
+      Ladda.bind( '#report_lists button', {
+        callback: function( instance ) {
+          var progress = 0;
+          var interval = setInterval( function() {
+            progress = Math.min( progress + Math.random() * 0.1, 1 );
+            instance.setProgress( progress );
+
+            if( progress === 1 ) {
+              instance.stop();
+              clearInterval( interval );
+            }
+          }, 200 );
+        }
+      });
+
+      // hide spinner
+      $(".sk-three-bounce").hide();
+
+      $('[data-toggle="tooltip"]').tooltip();
+      $('[data-toggle="popover"]').popover();
+      $('.dropdown-toggle').dropdown();
+
+      $('.table-responsive').responsiveTable({
+        pattern: 'priority-columns',
+        addFocusBtn: false
+      });
+
+      $("#report_lists").dataTable({
+        retrieve: true,
+        destroy: true,
+        responsive: true,
+        paging: false,
+        searching: false,
+        info: false,
+        lengthChange: false,
+        dom: 'Bfrtip',
+        fixedHeader: {
+          header: false,
+          footer: false
+        },
+        buttons: [
+          {
+            extend: 'print',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-print"></span> Print',
+            titleAttr: 'Print'
+          },
+          {
+            extend: 'csvHtml5',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-export"></span> CSV',
+            titleAttr: 'Export to CSV'
+          },
+          {
+            extend: 'pdfHtml5',
+            bom : true,
+            text: '<span class="glyphicon glyphicon-export"></span> PDF',
+            titleAttr: 'Export to PDF',
+            orientation: 'landscape',
+            pageSize: 'LEGAL'
+          }
+        ],
+        columns: [
+          {
+            width: "null",
+            searchable: false,
+            responsivePriority: 1
+          }, {
+            width: "null",
+            orderable: false,
+            searchable: true,
+            responsivePriority: 2
+          }, {
+            width: "null",
+            className: "row_config",
+            orderable: true,
+            searchable: false,
+            responsivePriority: 3
+          }, {
+            width: "null",
+            className: "row_config",
+            orderable: true,
+            searchable: false,
+            responsivePriority: 4
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 5
+          }, {
+            width: "null",
+            className: "center",
+            searchable: false,
+            orderable: false,
+            responsivePriority: 6
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 7
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: true,
+            responsivePriority: 8
+          }, {
+            width: "null",
+            className: "row_config",
+            searchable: false,
+            orderable: false,
+            responsivePriority: 9
+          }
+        ]
+      });
+    }

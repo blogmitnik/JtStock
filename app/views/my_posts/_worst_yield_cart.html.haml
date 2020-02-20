@@ -1,0 +1,171 @@
+%div
+  %ul.nav.nav-tabs{:role => "tablist"}
+    %li.active{:role => "presentation"}
+      %a{"aria-controls" => "best-shares-p", "data-toggle" => "tab", :href => "#best-shares-p", :role => "tab"} 股數百分比Top5分類指數
+    %li{:role => "presentation"}
+      %a{"aria-controls" => "best-closing-p", "data-toggle" => "tab", :href => "#best-closing-p", :role => "tab"} 成交百分比Top5分類指數
+
+  .tab-content
+    #best-shares-p.tab-pane.fade.in.active{:role => "tabpanel"}
+      - if @reports_for_cart.count > 0
+        .small{style: "margin-top: 15px; text-align: center;"}
+          %strong
+            股數百分比Top5的分類指數圖表
+        .chart-tags
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #cb4b4b;"}
+            %span.badge-category 少量佔比 (0 ~ 9.99 %)
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #f8aa33;"}
+            %span.badge-category 一般佔比 (10.00 ~ 49.99 %)
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #1fbba6;"}
+            %span.badge-category 多量佔比 (50.00 ~ 100 %)
+
+        = content_tag :div, "", id: "best-shares-p-yield-data", data: {reports: best_percentage_chart_data(@reports_for_cart)}
+      - else
+        .well{:style => "margin-top: 10px;"}
+          .blankslate.text-center
+            %h3 沒有資料
+            %p 抱歉，沒有資料可以呈現圖表
+
+    #best-closing-p.tab-pane.fade{:role => "tabpanel"}
+      - if @reports_for_cart.count > 0
+        .small{style: "margin-top: 15px; text-align: center;"}
+          %strong
+            成交百分比Top5的分類指數圖表
+        .chart-tags
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #ff7070;"}
+            %span.badge-category 少量佔比 (0 ~ 9.99 %)
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #ffc652;"}
+            %span.badge-category 一般佔比 (10.00 ~ 49.99 %)
+          .badge-wrapper.bullet
+            %span.badge-category-bg{:style => "background-color: #4da74d;"}
+            %span.badge-category 多量佔比 (50.00 ~ 100 %)
+
+        = content_tag :div, "", id: "best-closing-p-yield-data", data: {reports: best_percentage_chart_data(@reports_for_cart)}
+      - else
+        .well{:style => "margin-top: 10px;"}
+          .blankslate.text-center
+            %h3 沒有資料
+            %p 抱歉，沒有資料可以呈現圖表
+            
+:javascript
+  jQuery(function() {
+    $('ul.nav a').on('shown.bs.tab', function (e) {
+      best_shares_percentage_graph.redraw();
+      best_closing_percentage_graph.redraw();
+      $('svg').css({ width: '100%' });
+    });
+
+    var best_shares_percentage_graph = Morris.Bar({
+      element: 'best-shares-p-yield-data',
+      smooth: true,
+      continuousLine: true,
+      behaveLikeLine: true,
+      barColors: function(row, series, type) {
+        if (type === 'bar') {
+          if (row.y >= 50.00 && row.y <= 100) {
+            return '#1fbba6';
+          } else if (row.y >= 10.00 && row.y <= 49.99) {
+            return '#f8aa33';
+          } else if (row.y >= 0 && row.y <= 9.99) {
+            return '#cb4b4b';
+          }
+        } else {
+          return '#000';
+        }
+      },
+      lineWidth: 4,
+      fillOpacity: 0.8,
+      resize: true,
+      hideHover: 'auto',
+      continuousLine: true,
+      data: $('#best-shares-p-yield-data').data('reports'),
+      goals: [0, 50, 100],
+      goalLineColors: ['#e74c3c', '#e67e22', '#2ecc71'],
+      xkey: 'published_at',
+      ykeys: ['best1_shares_percentage', 'best2_shares_percentage', 'best3_shares_percentage', 'best4_shares_percentage', 'best5_shares_percentage'],
+      labels: ['best1_shares_percentage_index', 'best2_shares_percentage_index', 'best3_shares_percentage_index', 'best4_shares_percentage_index', 'best5_shares_percentage_index'],
+      "hoverCallback":  function(index, options, content){
+        var row = options.data[index]
+        datetime = '<p><b>' + row.published_at + '</b></p>'
+        var top1_index = row.best1_shares_percentage + options.postUnits;
+        var top2_index = row.best2_shares_percentage + options.postUnits;
+        var top3_index = row.best3_shares_percentage + options.postUnits;
+        var top4_index = row.best4_shares_percentage + options.postUnits;
+        var top5_index = row.best5_shares_percentage + options.postUnits;
+
+        p_index1 = '<div style="color: #555;"><strong>Top1: </strong>' + row.best1_shares_percentage_index + ' (' + top1_index + ')</div>'
+        p_index2 = '<div style="color: #555;"><strong>Top2: </strong>' + row.best2_shares_percentage_index + ' ('  + top2_index + ')</div>'
+        p_index3 = '<div style="color: #555;"><strong>Top3: </strong>' + row.best3_shares_percentage_index + ' ('  + top3_index + ')</div>'
+        p_index4 = '<div style="color: #555;"><strong>Top4: </strong>' + row.best4_shares_percentage_index + ' ('  + top4_index + ')</div>'
+        p_index5 = '<div style="color: #555;"><strong>Top5: </strong>' + row.best5_shares_percentage_index + ' ('  + top5_index + ')</div>'
+        
+        return [datetime, p_index1, p_index2, p_index3, p_index4, p_index5]
+      },
+      trendLine: true,
+      postUnits: '%',
+      ymin: 'auto',
+      ymax: 'auto',
+      parseTime: false,
+      barOpacity: 0.8,
+      behaveLikeLine: true
+    });
+
+    var best_closing_percentage_graph =  Morris.Bar({
+      element: 'best-closing-p-yield-data',
+      smooth: true,
+      continuousLine: true,
+      behaveLikeLine: true,
+      barColors: function(row, series, type) {
+        if (type === 'bar') {
+          if (row.y >= 50.00 && row.y <= 100) {
+            return '#4da74d';
+          } else if (row.y >= 10.00 && row.y <= 49.99) {
+            return '#ffc652';
+          } else if (row.y >= 0 && row.y <= 9.99) {
+            return '#ff7070';
+          }
+        } else {
+          return '#000';
+        }
+      },
+      lineWidth: 4,
+      fillOpacity: 0.8,
+      resize: true,
+      hideHover: 'auto',
+      continuousLine: true,
+      data: $('#best-closing-p-yield-data').data('reports'),
+      goals: [0, 50, 100],
+      goalLineColors: ['#e74c3c', '#e67e22', '#2ecc71'],
+      xkey: 'published_at',
+      ykeys: ['best1_closing_percentage', 'best2_closing_percentage', 'best3_closing_percentage', 'best4_closing_percentage', 'best5_closing_percentage'],
+      labels: ['best1_closing_percentage_index', 'best2_closing_percentage_index', 'best3_closing_percentage_index', 'best4_closing_percentage_index', 'best5_closing_percentage_index'],
+      "hoverCallback":  function(index, options, content){
+        var row = options.data[index]
+        datetime = '<p><b>' + row.published_at + '</b></p>'
+        var top1_index = row.best1_closing_percentage + options.postUnits;
+        var top2_index = row.best2_closing_percentage + options.postUnits;
+        var top3_index = row.best3_closing_percentage + options.postUnits;
+        var top4_index = row.best4_closing_percentage + options.postUnits;
+        var top5_index = row.best5_closing_percentage + options.postUnits;
+
+        c_index1 = '<div style="color: #555;"><strong>Top1: </strong>' + row.best1_closing_percentage_index + ' (' + top1_index + ')</div>'
+        c_index2 = '<div style="color: #555;"><strong>Top2: </strong>' + row.best2_closing_percentage_index + ' ('  + top2_index + ')</div>'
+        c_index3 = '<div style="color: #555;"><strong>Top3: </strong>' + row.best3_closing_percentage_index + ' ('  + top3_index + ')</div>'
+        c_index4 = '<div style="color: #555;"><strong>Top4: </strong>' + row.best4_closing_percentage_index + ' ('  + top4_index + ')</div>'
+        c_index5 = '<div style="color: #555;"><strong>Top5: </strong>' + row.best5_closing_percentage_index + ' ('  + top5_index + ')</div>'
+        
+        return [datetime, c_index1, c_index2, c_index3, c_index4, c_index5]
+      },
+      postUnits: '%',
+      ymin: 'auto',
+      ymax: 'auto',
+      parseTime: false,
+      barOpacity: 0.8,
+      behaveLikeLine: true
+    });
+  });
