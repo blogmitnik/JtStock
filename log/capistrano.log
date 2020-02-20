@@ -1,0 +1,49 @@
+# Logfile created on 2020-02-20 16:33:08 +0800 by logger.rb/56438
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 16:33:08 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [ab8d97d6] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [ab8d97d6] Command: /usr/bin/env mkdir -p /tmp
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 16:34:48 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [6ec92006] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [6ec92006] Command: /usr/bin/env mkdir -p /tmp
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 16:37:20 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [2f5981a8] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [2f5981a8] Command: /usr/bin/env mkdir -p /tmp
+  INFO [2f5981a8] Finished in 2.235 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [97060e03] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [97060e03] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [97060e03] Finished in 1.014 seconds with exit status 0 (successful).
+  INFO [50d86cf1] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [50d86cf1] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [50d86cf1] 	Warning: Permanently added 'github.com,13.250.177.223' (RSA) to the list of known hosts.
+ DEBUG [50d86cf1] 	git@github.com: Permission denied (publickey).
+ DEBUG [50d86cf1] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 16:47:54 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [21b47418] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [21b47418] Command: /usr/bin/env mkdir -p /tmp
+  INFO [21b47418] Finished in 2.893 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [1457e13f] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [1457e13f] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [1457e13f] Finished in 0.339 seconds with exit status 0 (successful).
+  INFO [f85075cd] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [f85075cd] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [f85075cd] 	Warning: Permanently added the RSA host key for IP address '52.74.223.119' to the list of known hosts.
+ DEBUG [f85075cd] 	git@github.com: Permission denied (publickey).
+ DEBUG [f85075cd] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.

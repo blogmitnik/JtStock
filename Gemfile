@@ -16,6 +16,9 @@ gem 'jwt'
 gem 'http-2', '~> 0.8.1'
 gem 'net-http2'
 
+gem 'ed25519'
+gem 'bcrypt_pbkdf'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 

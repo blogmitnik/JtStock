@@ -54,6 +54,7 @@ GEM
     autoprefixer-rails (6.3.6.2)
       execjs
     bcrypt (3.1.11)
+    bcrypt_pbkdf (1.0.1)
     bootstrap-sass (3.1.1.1)
       sass (~> 3.2)
     bourbon (3.2.4)
@@ -129,6 +130,7 @@ GEM
     docile (1.1.5)
     doorkeeper (0.4.2)
       railties (~> 3.1)
+    ed25519 (1.2.4)
     erubis (2.7.0)
     eventmachine (1.2.7)
     execjs (2.7.0)
@@ -427,6 +429,7 @@ DEPENDENCIES
   activerecord-import
   autoprefixer-rails
   bcrypt
+  bcrypt_pbkdf
   bootstrap-sass (~> 3.1.1.0)
   cancan
   capistrano
@@ -438,6 +441,7 @@ DEPENDENCIES
   compass-rails
   database_cleaner
   doorkeeper (~> 0.4.2)
+  ed25519
   factory_girl
   ffaker
   font-awesome-rails
