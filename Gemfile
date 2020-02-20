@@ -1,13 +1,11 @@
 source 'https://rubygems.org'
 
-ruby '2.3.2'
-
 def darwin_only(require_as)
   RUBY_PLATFORM.include?('darwin') && require_as
 end
 
 gem 'rails', '3.2.22'
-#gem 'puma'
+gem 'unicorn'
 gem 'whenever', :require => false
 gem 'activerecord-import'
 gem 'parallel'
@@ -103,6 +101,10 @@ gem "cancan"
 #gem 'rvm-capistrano'
 
 gem 'mysql2', '~> 0.3.21'
+gem 'sqlite3'
+gem 'thin'
+gem 'capistrano'
+gem 'capistrano-rails'
 
 group :development do
   gem 'pry'
