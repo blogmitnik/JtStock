@@ -42,7 +42,7 @@
       });
     });
 
-    var start = moment().subtract(0, 'days');
+    var start = moment().subtract(6, 'days');
     var end = moment();
 
     function cb2(start, end) {
@@ -56,7 +56,7 @@
         opens: "center",
         ranges: {
            '今天': [moment(), moment()],
-           '過去 7 天': [moment().subtract(6, 'days'), moment()],
+           '過去 10 天': [moment().subtract(6, 'days'), moment()],
            '過去 15 天': [moment().subtract(14, 'days'), moment()],
            '過去 30 天': [moment().subtract(29, 'days'), moment()],
            '過去 60 天': [moment().subtract(59, 'days'), moment()]

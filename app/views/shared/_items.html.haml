@@ -185,6 +185,7 @@
             %th 
               = date.published_at.strftime('%Y-%m-%d').to_s
               股數
+          - @distinct_date.each do |date|
             %th 
               = date.published_at.strftime('%Y-%m-%d').to_s
               成交
@@ -237,6 +238,7 @@
             - data.each do |d|
               %td{:style => "vertical-align: middle;"}
                 = d.shares_percentage
+            - data.each do |d|
               %td{:style => "vertical-align: middle;"}
                 = d.closing_percentage
             - if @distinct_date.count == 2
@@ -355,13 +357,13 @@
               className: "row_config",
               searchable: false,
               orderable: true,
-              responsivePriority: 5
+              responsivePriority: 4
             }, {
               width: "null",
               className: "row_config",
               orderable: true,
               searchable: false,
-              responsivePriority: 4
+              responsivePriority: 5
             }, {
               width: "null",
               className: "center",
@@ -373,13 +375,13 @@
               className: "row_config",
               searchable: false,
               orderable: true,
-              responsivePriority: 8
+              responsivePriority: 7
             }, {
               width: "null",
               className: "row_config",
               searchable: false,
               orderable: true,
-              responsivePriority: 7
+              responsivePriority: 8
             }, {
               width: "null",
               searchable: false,
