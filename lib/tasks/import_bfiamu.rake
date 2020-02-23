@@ -12,7 +12,7 @@ task :import_bfiamu, [:filename] => :environment do
     no_row_files = []
     filtered_csvs = []
     check_filename_date = []
-    target_folder = '/Users/david/desktop/BFIAMU_CSV'
+    target_folder = Dir.home + '/bfiamu_csv'
     # Define the folder of CSV files
 	d = Dir.new(target_folder)
 	#Dir.chdir(d)

@@ -47,3 +47,75 @@ and the repository exists.
 
 Please make sure you have the correct access rights
 and the repository exists.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 16:54:05 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [1fe8bf29] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [1fe8bf29] Command: /usr/bin/env mkdir -p /tmp
+  INFO [1fe8bf29] Finished in 1.977 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [7fbea118] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [7fbea118] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [7fbea118] Finished in 0.375 seconds with exit status 0 (successful).
+  INFO [e4a862c2] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [e4a862c2] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [e4a862c2] 	git@github.com: Permission denied (publickey).
+ DEBUG [e4a862c2] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 17:03:24 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [01304fbb] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [01304fbb] Command: /usr/bin/env mkdir -p /tmp
+  INFO [01304fbb] Finished in 2.537 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [199a6624] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [199a6624] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [199a6624] Finished in 0.390 seconds with exit status 0 (successful).
+  INFO [a2261776] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [a2261776] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [a2261776] 	git@github.com: Permission denied (publickey).
+ DEBUG [a2261776] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 17:16:07 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [ad85d546] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [ad85d546] Command: /usr/bin/env mkdir -p /tmp
+  INFO [ad85d546] Finished in 2.199 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [dfabeaf8] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [dfabeaf8] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [dfabeaf8] Finished in 0.507 seconds with exit status 0 (successful).
+  INFO [d2e4ef9a] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [d2e4ef9a] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [d2e4ef9a] 	git@github.com: Permission denied (publickey).
+ DEBUG [d2e4ef9a] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+  INFO ---------------------------------------------------------------------------
+  INFO START 2020-02-20 17:19:35 +0800 cap production deploy:check
+  INFO ---------------------------------------------------------------------------
+  INFO [2826a88b] Running /usr/bin/env mkdir -p /tmp as deploy@172.105.127.250
+ DEBUG [2826a88b] Command: /usr/bin/env mkdir -p /tmp
+  INFO [2826a88b] Finished in 2.111 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-JtStock-production-david.sh 0.0%
+  INFO Uploading /tmp/git-ssh-JtStock-production-david.sh 100.0%
+  INFO [6ea5b5e4] Running /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh as deploy@172.105.127.250
+ DEBUG [6ea5b5e4] Command: /usr/bin/env chmod 700 /tmp/git-ssh-JtStock-production-david.sh
+  INFO [6ea5b5e4] Finished in 0.354 seconds with exit status 0 (successful).
+  INFO [30835215] Running /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD as deploy@172.105.127.250
+ DEBUG [30835215] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-JtStock-production-david.sh" ; /usr/bin/env git ls-remote git@github.com:blogmitnik/JtStock.git HEAD )
+ DEBUG [30835215] 	git@github.com: Permission denied (publickey).
+ DEBUG [30835215] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.

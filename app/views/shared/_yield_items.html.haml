@@ -2,13 +2,14 @@
   .table-responsive.record_lists
     #report_lists_filter
       - if params[:commit].present? && params[:commit] == "Search" && @distinct_date.count > 1
-        #tab.btn-group{"data-toggle" => "buttons-radio"}
-          %a.btn.btn-large.btn-default.summarize-dates.active{"aria-controls" => "date-summarize", "data-toggle" => "tab", :href => "#date-summarize", :role => "tab"}
-            %span.glyphicon.glyphicon-th-large
-            按日期比較
-          %a.btn.btn-large.btn-default.summarize-indexes{"aria-controls" => "index-summarize", "data-toggle" => "tab", :href => "#index-summarize", :role => "tab"}
-            %span.glyphicon.glyphicon-th-list
-            按指數總覽
+        - unless params[:search_type].present? && params[:search_type] == "Range"
+          #tab.btn-group{"data-toggle" => "buttons-radio"}
+            %a.btn.btn-large.btn-default.summarize-dates.active{"aria-controls" => "date-summarize", "data-toggle" => "tab", :href => "#date-summarize", :role => "tab"}
+              %span.glyphicon.glyphicon-th-large
+              按日期比較
+            %a.btn.btn-large.btn-default.summarize-indexes{"aria-controls" => "index-summarize", "data-toggle" => "tab", :href => "#index-summarize", :role => "tab"}
+              %span.glyphicon.glyphicon-th-list
+              按指數總覽
 
           / - if params[:data_type].nil?
           /   %a.btn.btn-large.btn-default.active{:href => url_for(:controller => controller.controller_name, :action => controller.action_name, :product_id => params[:product_id], :my_post_id => params[:my_post_id], :utf8 => params[:utf8], :station => params[:station], :config => params[:config], :date_range => params[:date_range], :commit => params[:commit], :date => params[:date], :build => params[:build]), "data-remote" => "true"}

@@ -29,7 +29,23 @@
       - if controller.controller_name == 'reports' && params[:commit] == "GlobalSearch"
         = render :partial => "shared/global_search_box"
       - else
-        = render :partial => "shared/search_box"
+        /= render :partial => "shared/search_box"
+        %ul.nav.nav-tabs{:role => "tablist"}
+          %li.active{:role => "presentation"}
+            %a{"aria-controls" => "multidates-search", "data-toggle" => "tab", :href => "#multidates-search", :role => "tab"}
+              %span.glyphicon.glyphicon-th-list
+              多個日期
+          %li{:role => "presentation"}
+            %a{"aria-controls" => "daterange-search", "data-toggle" => "tab", :href => "#daterange-search", :role => "tab"}
+              %span.glyphicon.glyphicon-th-large
+              連續日期
+
+        .tab-content
+          #multidates-search.tab-pane.fade.in.active{:role => "tabpanel"}
+            = render :partial => "shared/search_box"
+          #daterange-search.tab-pane.fade{:role => "tabpanel"}
+            = render :partial => "shared/search_box_range"
+
 
     / 分類指數百分比視覺圖表
     - if controller.controller_name == 'reports'

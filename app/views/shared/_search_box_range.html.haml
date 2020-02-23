@@ -1,0 +1,77 @@
+.entry-meta.row
+  %aside.meta-details
+    #date-range
+      = render :partial => "shared/date_range"
+    #search.searchBox
+      = form_tag search_my_post_reports_path(@post, build: params[:build]), method: :get, remote: true, id: "search-reports", class: 'row' do
+        / .col-sm-12.col-md-3.inner-addon.left-addon
+        /   %i.glyphicon.glyphicon-tags
+        /   - if controller.controller_name == 'stations'
+        /     / For Station page
+        /     = autocomplete_field_tag :station, '', autocomplete_station_name_product_my_post_reports_path(@product, @post), class: 'form-control input-lg uneditable-input', value: "#{@station.name}", readonly: true
+        /     = hidden_field_tag :from_station, "#{@station.id}"
+        /   - else
+        /     / For Post page
+        /     = autocomplete_field_tag :station, '', autocomplete_station_name_my_post_reports_path(@post), class: 'form-control input-lg', placeholder: '分類指數名稱 (可不填)'
+
+        .col-xs-12.col-sm-6.col-md-6.inner-addon.left-addon
+          %i.glyphicon.glyphicon-calendar
+          = text_field_tag :date_range, params[:date_range], id: 'search-daterange', class: 'daterange form-control input-lg', autocomplete: 'off', placeholder: '選擇日期區間'
+
+        .col-xs-12.col-sm-6.col-md-6
+          = hidden_field_tag :commit, "Search"
+          = hidden_field_tag :search_type, "Range"
+          %button#search-range-button.btn.btn-danger.btn-lg.btn-block.tclick.ladda-button{:type => "submit", "data-style" => "expand-right", :disabled => true}
+            %span.glyphicon.glyphicon-search
+            連續日期比較
+
+:javascript
+  $(function() {
+    Ladda.bind( '.searchBox button[type=submit]' );
+    $('button[type=submit]').click(function(e){
+      $(document).ajaxStart(function(){
+        $("#date-selector").fadeTo("fast", 0.3);
+        $(".record_lists").fadeTo("fast", 0.3);
+        $(".chart_section").fadeTo("fast", 0.3);
+      });
+      $(document).ajaxStop(function(){
+        Ladda.stopAll();
+        $("#date-selector").fadeTo("fast", 1.0);
+        $(".record_lists").fadeTo("fast", 1.0);
+        $(".chart_section").fadeTo("fast", 1.0);
+      });
+    });
+
+    var start = moment().subtract(0, 'days');
+    var end = moment();
+
+    function cb2(start, end) {
+        $('input[class="daterange"]').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+
+    $('input[id="search-daterange"]').daterangepicker({
+        startDate: start,
+        endDate: end,
+        autoApply: true,
+        opens: "center",
+        ranges: {
+           '今天': [moment(), moment()],
+           '過去 7 天': [moment().subtract(6, 'days'), moment()],
+           '過去 15 天': [moment().subtract(14, 'days'), moment()],
+           '過去 30 天': [moment().subtract(29, 'days'), moment()],
+           '過去 60 天': [moment().subtract(59, 'days'), moment()]
+        },
+        locale: {
+          format: "YYYY-MM-DD",
+          separator: " - "
+        }
+    }, cb2);
+
+    cb2(start, end);
+
+    $('input[id="search-daterange"]').on('apply.daterangepicker', function(ev, picker) {
+      $('button#search-range-button').removeAttr('disabled');
+      cb2(start, end);
+    });
+
+  });

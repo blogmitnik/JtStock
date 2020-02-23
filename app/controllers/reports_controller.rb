@@ -76,13 +76,14 @@ class ReportsController < ApplicationController
       date1 = params[:date1] if params[:date1]
       date2 = params[:date2] if params[:date2]
       date3 = params[:date3] if params[:date3]
+      search_type = params[:search_type] if params[:search_type]
 
       t = Report.arel_table
       @reports_for_cart = Report.where(post_id: @post)
       @reports_for_cart = @reports_for_cart.where(t[:station_name].matches("#{station}")) if station.present?
 
       # Multiple Date Search
-      if date1.present? || date2.present? || date3.present?
+      if date1.present? || date2.present? || date3.present? && !search_type.present?
         dates_for_filter = []
         [date1, date2, date3].each do |date|
           dates_for_filter << date if date.present?
@@ -91,127 +92,64 @@ class ReportsController < ApplicationController
         @dates_selected = @reports_for_cart.select("distinct(published_at)")
         @dates_selected_count = @dates_selected.count
 
+        report_for_tmp = @reports_for_cart
+        @reports_for_cart = report_for_tmp.order("published_at ASC")
+        @distinct_date = @reports_for_cart.select("distinct(published_at)")
+        
+        @reports = report_for_tmp.order("station_id ASC, published_at ASC").page(page)
+        @reports_summarize = @reports_for_cart.group_by(&:station_name)
       # Date Range Search
-      elsif date_from.present? && date_to.present?
+      elsif date_from.present? && date_to.present? && search_type.present?
         if date_from != date_to # Search for multiple days (ex. Jun 20 ~ Jun 23)
-          # If search station, show data with each hour
-          if params[:station].present? && params[:station] != "" && params[:data_period].present? && params[:data_period] == "hourly"
-            @reports_for_cart = @reports_for_cart.where("(p_year = ? AND p_month = ? AND p_mday = ? AND p_hour >= ?) OR ((p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?)) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?)", 
-              "#{date_from.to_date.year}", "#{date_from.to_date.month}", "#{date_from.to_date.day}", 6, 
-              "#{date_from.to_date.tomorrow.year}", "#{date_to.to_date.year}", "#{date_from.to_date.tomorrow.month}", "#{date_to.to_date.month}", "#{date_from.to_date.tomorrow.day}", "#{date_to.to_date.day}", 
-              "#{date_to.to_date.tomorrow.year}", "#{date_to.to_date.tomorrow.month}", "#{date_to.to_date.tomorrow.day}", 6)
-          else
-            # Search build, show data with only latest hour in each day
-            @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) AND (p_hour >= ?) ) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) AND (p_hour < ?) )", 
-              "#{date_from.to_date.year}", "#{date_to.to_date.year}", "#{date_from.to_date.month}", "#{date_to.to_date.month}", "#{date_from.to_date.day}", "#{date_to.to_date.day}", 6, 
-              "#{date_from.to_date.tomorrow.year}", "#{date_to.to_date.tomorrow.year}", "#{date_from.to_date.tomorrow.month}", "#{date_to.to_date.month}", "#{date_from.to_date.tomorrow.day}", "#{date_to.to_date.tomorrow.day}", 6)
-            # Define the date range for search feature
-            search_date_range = ("#{date_from}".."#{date_to}")
-            search_date_range.each do |the_date|
-              date_range_index = search_date_range.find_index(the_date)
-              #first_timestamp_of_date = @reports_for_cart.group(["p_year", "p_month", "p_mday"]).select("p_year, p_month, p_mday, Max(p_hour) as latest_hour").first
-              #puts first_timestamp_of_date.p_mday.to_s
-              record_of_midnight = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?", the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, 6).first
-              latest_hour_of_tomorrow = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour > ?", the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, 6).order("published_at DESC").first
-              latest_hour_of_today = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour > ?", the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6).order("published_at DESC").first
-              latest_hour_of_yesterday = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour >= ?", the_date.to_date.yesterday.year, the_date.to_date.yesterday.month, the_date.to_date.yesterday.day, 6).order("published_at DESC").first
-              first_timestamp_of_date = @reports_for_cart.group(["p_year", "p_month", "p_mday"]).select("p_year, p_month, p_mday, Max(p_hour) as latest_hour").first
-              last_timestamp_of_date = @reports_for_cart.group(["p_year", "p_month", "p_mday"]).select("p_year, p_month, p_mday, Max(p_mday) as last_day").order("p_mday DESC").first
-              # Check if tomorrow of the_date has data with (hour < 6) for the_date.to_date
-              if !record_of_midnight.nil?
-                if !latest_hour_of_tomorrow.nil?
-                  # Both record_of_midnight and latest_hour_of_tomorrow for the_date are found
-                  if !latest_hour_of_yesterday.nil?
-                    @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND (p_hour = ? OR p_hour = ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?))", 
-                      the_date.to_date.tomorrow.tomorrow.year, search_date_range.last.to_date.tomorrow.year, the_date.to_date.tomorrow.tomorrow.month, search_date_range.last.to_date.tomorrow.month, the_date.to_date.tomorrow.tomorrow.day, search_date_range.last.to_date.tomorrow.day, 
-                      the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, record_of_midnight.p_hour, latest_hour_of_tomorrow.p_hour, 
-                      the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6, 
-                      search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                  else
-                    @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND (p_hour = ? OR p_hour = ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?))", 
-                      the_date.to_date.tomorrow.tomorrow.year, search_date_range.last.to_date.tomorrow.year, the_date.to_date.tomorrow.tomorrow.month, search_date_range.last.to_date.tomorrow.month, the_date.to_date.tomorrow.tomorrow.day, search_date_range.last.to_date.tomorrow.day, 
-                      the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, record_of_midnight.p_hour, latest_hour_of_tomorrow.p_hour, 
-                      the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6, 
-                      search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                  end
-                else
-                  # latest_hour_of_tomorrow for the_date is not found
-                  @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour = ?) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?)", 
-                    search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day,
-                    the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, record_of_midnight.p_hour,
-                    the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6)
-                end
-              else
-                # Check if there is latest hour (hour > 6) exist for the_date
-                if !latest_hour_of_today.nil?
-                  #if search_date_range.find_index(the_date).equal? 0
-                  if first_timestamp_of_date.p_mday.equal? the_date.to_date.day
-                    if !search_date_range.find_index(the_date).equal? 0
-                      @reports_for_cart = @reports_for_cart.where("(p_year = ? AND p_month = ? AND p_mday = ? AND (p_hour < ? OR p_hour = ?)) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) )", 
-                        the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6, latest_hour_of_today.p_hour, 
-                        the_date.to_date.tomorrow.year, search_date_range.last.to_date.tomorrow.year, the_date.to_date.tomorrow.month, search_date_range.last.to_date.tomorrow.month, the_date.to_date.tomorrow.day, search_date_range.last.to_date.tomorrow.day, 
-                        search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                    else
-                      @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour = ?) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) )", 
-                        the_date.to_date.tomorrow.year, search_date_range.last.to_date.tomorrow.year, the_date.to_date.tomorrow.month, search_date_range.last.to_date.tomorrow.month, the_date.to_date.tomorrow.day, search_date_range.last.to_date.tomorrow.day, 
-                        the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, latest_hour_of_today.p_hour, 
-                        search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                    end
-                  elsif search_date_range.find_index(the_date).between? 1, search_date_range.count - 2
-                    @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) ) OR (p_year = ? AND p_month = ? AND p_mday = ? AND (p_hour < ? OR p_hour = ?)) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) )", 
-                      the_date.to_date.tomorrow.year, search_date_range.last.to_date.tomorrow.year, the_date.to_date.tomorrow.month, search_date_range.last.to_date.tomorrow.month, the_date.to_date.tomorrow.day, search_date_range.last.to_date.tomorrow.day, 
-                      the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6, latest_hour_of_today.p_hour, 
-                      search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                  elsif last_timestamp_of_date.p_mday.equal? the_date.to_date.day
-                    @reports_for_cart = @reports_for_cart.where("(p_year = ? AND p_month = ? AND p_mday = ? AND (p_hour = ? OR p_hour < ?)) OR ( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) )", 
-                      the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, latest_hour_of_today.p_hour, 6, 
-                      search_date_range.first.to_date.year, the_date.to_date.yesterday.year, search_date_range.first.to_date.month, the_date.to_date.yesterday.month, search_date_range.first.to_date.day, the_date.to_date.yesterday.day)
-                  end
-                end
-              end
-              # After handling last datetime timestamp (search_date_range.last), check if 2nd date of timestamp has midnight hour (hour < 6), if yes then delete all records of 1st date of timestamp
-              if (search_date_range.find_index(the_date).equal? search_date_range.count - 1) && record_of_midnight.nil?
-                #latest_hour_of_first_date = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour >= ?", search_date_range.first.to_date.year, search_date_range.first.to_date.month, search_date_range.first.to_date.day, 6).first
-                midnight_hour_of_second_date = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?", search_date_range.first.to_date.tomorrow.year, search_date_range.first.to_date.tomorrow.month, search_date_range.first.to_date.tomorrow.day, 6).first
-                if !midnight_hour_of_second_date.nil?
-                  @reports_for_cart = @reports_for_cart.where("( (p_year BETWEEN ? AND ?) AND (p_month BETWEEN ? AND ?) AND (p_mday BETWEEN ? AND ?) )", 
-                    search_date_range.first.to_date.tomorrow.year, search_date_range.last.to_date.year, search_date_range.first.to_date.tomorrow.month, search_date_range.last.to_date.month, search_date_range.first.to_date.tomorrow.day, search_date_range.last.to_date.day)
-                end
-              end
-            end
+          dates_for_filter = []
+          search_date_range = ("#{date_from}".."#{date_to}")
+          search_date_range.each do |the_date|
+            dates_for_filter.append(the_date)
+          end
+          @reports_for_cart = @reports_for_cart.where(published_at: [dates_for_filter])
+          report_for_tmp = @reports_for_cart
+          @reports_for_cart = report_for_tmp.order("published_at ASC")
+          @distinct_date = @reports_for_cart.select("distinct(published_at)")
+          
+          @reports = report_for_tmp.order("station_id ASC, published_at ASC").page(page)
+          @reports_summarize = report_for_tmp.select('station_name, MAX(shares_percentage) as best_sp, MIN(shares_percentage) as worst_sp, MAX(closing_percentage) as best_cp, MIN(closing_percentage) as worst_cp').group(:station_id, :station_name)
+
+          # Get all dates that best shares percentage occurs
+          @best_sp_dates = []
+          @reports_summarize.each do |item|
+            matched_dates = @reports_for_cart.where(station_name: item.station_name).where("shares_percentage > ? AND shares_percentage < ?", item.best_sp - 0.00001, item.best_sp + 0.00001)
+            @best_sp_dates.append(matched_dates)
+          end
+
+          # Get all dates that worst shares percentage occurs
+          @worst_sp_dates = []
+          @reports_summarize.each do |item|
+            matched_dates = @reports_for_cart.where(station_name: item.station_name).where("shares_percentage > ? AND shares_percentage < ?", item.worst_sp - 0.00001, item.worst_sp + 0.00001)
+            @worst_sp_dates.append(matched_dates)
+          end
+
+          # Get all dates that best closing percentage occurs
+          @best_cp_dates = []
+          @reports_summarize.each do |item|
+            matched_dates = @reports_for_cart.where(station_name: item.station_name).where("closing_percentage > ? AND closing_percentage < ?", item.best_cp - 0.00001, item.best_cp + 0.00001)
+            @best_cp_dates.append(matched_dates)
+          end
+
+          # Get all dates that worst closing percentage occurs
+          @worst_cp_dates = []
+          @reports_summarize.each do |item|
+            matched_dates = @reports_for_cart.where(station_name: item.station_name).where("closing_percentage > ? AND closing_percentage < ?", item.worst_cp - 0.00001, item.worst_cp + 0.00001)
+            @worst_cp_dates.append(matched_dates)
           end
         else
           the_date = "#{date_from}"
-          record_of_midnight = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?", the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, 6).first
-          if !record_of_midnight.nil?
-            @reports_for_cart = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour = ?", 
-              the_date.to_date.tomorrow.year, the_date.to_date.tomorrow.month, the_date.to_date.tomorrow.day, record_of_midnight.p_hour)
-          else
-            latest_hour_of_today = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour >= ?", the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, 6).order("published_at DESC").first
-            @reports_for_cart = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour = ?", 
-              the_date.to_date.year, the_date.to_date.month, the_date.to_date.day, latest_hour_of_today.p_hour)
-          end
-          #@reports_for_cart = @reports_for_cart.where("(p_year = ? AND p_month = ? AND p_mday = ? AND p_hour >= ?) OR (p_year = ? AND p_month = ? AND p_mday = ? AND p_hour < ?)", 
-          #  "#{date_from.to_date.year}", "#{date_from.to_date.month}", "#{date_from.to_date.day}", 6, 
-          #  "#{date_from.to_date.tomorrow.year}", "#{date_from.to_date.tomorrow.month}", "#{date_from.to_date.tomorrow.day}", 6)
+          
           if params[:station] == ""
             latest_date = @reports_for_cart.maximum('published_at')
             @reports_for_cart = @reports_for_cart.where(published_at: latest_date)
           end
         end
       end
-
-      if fix_datetime.present?
-        # Search config at specific datetime
-        @reports_for_cart = @reports_for_cart.where("p_year = ? AND p_month = ? AND p_mday = ? AND p_hour = ?", 
-          fix_datetime.to_datetime.year, fix_datetime.to_datetime.month, fix_datetime.to_datetime.day, fix_datetime.to_datetime.hour)
-      end
-      report_for_tmp = @reports_for_cart
-      @reports_for_cart = report_for_tmp.order("published_at ASC")
-      @distinct_date = @reports_for_cart.select("distinct(published_at)")
-      
-      @reports = report_for_tmp.order("station_id ASC, published_at ASC").page(page)
-      @reports_summarize = @reports_for_cart.group_by(&:station_name)
     end
   end
 

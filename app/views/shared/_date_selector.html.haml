@@ -4,7 +4,7 @@
     %li.active{:role => "presentation"}
       %a{:href => "#"}
         %span.glyphicon.glyphicon-search
-        篩選結果
+        搜尋結果
         %span.badge= @reports_for_cart.count.to_i
 - else
   %ul.nav.nav-tabs{:style => "margin-bottom: 5px;"}
@@ -45,15 +45,20 @@
       %li.active{:role => "presentation"}
         %a{:href => "#"}
           %span.glyphicon.glyphicon-search
-          篩選結果
-          %span.badge= @reports_for_cart.count.to_i
+          搜尋結果
+          %span.badge
+            連續
+            = @distinct_date.count
+            天比較
 
     - if !params[:date1].nil? || !params[:date2].nil? || !params[:date3].nil?
       %li.active{:role => "presentation"}
         %a{:href => "#"}
           %span.glyphicon.glyphicon-search
-          篩選結果
-          %span.badge= @reports_for_cart.count.to_i
+          搜尋結果
+          %span.badge
+            = @distinct_date.count
+            個日期比較
 
 :javascript
   $(document).ready(function() {

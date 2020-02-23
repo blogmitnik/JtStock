@@ -16,19 +16,19 @@
 
         .col-xs-6.col-sm-3.col-md-3.inner-addon.left-addon
           %i.glyphicon.glyphicon-calendar
-          = text_field_tag :date1, params[:date1], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇要搜尋的日期1'
+          = text_field_tag :date1, params[:date1], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期1'
         .col-xs-6.col-sm-3.col-md-3.inner-addon.left-addon
           %i.glyphicon.glyphicon-calendar
-          = text_field_tag :date2, params[:date2], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇要搜尋的日期2'
+          = text_field_tag :date2, params[:date2], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期2'
         .col-xs-6.col-sm-3.col-md-3.inner-addon.left-addon
           %i.glyphicon.glyphicon-calendar
-          = text_field_tag :date3, params[:date3], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇要搜尋的日期3'
+          = text_field_tag :date3, params[:date3], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期3'
 
         .col-xs-12.col-sm-3.col-md-2
           = hidden_field_tag :commit, "Search"
           %button#search-button.btn.btn-danger.btn-lg.btn-block.tclick.ladda-button{:type => "submit", "data-style" => "expand-right", :disabled => true}
             %span.glyphicon.glyphicon-search
-            找資料
+            日期比較
 
 :javascript
   $(function() {

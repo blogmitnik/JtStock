@@ -1,0 +1,14 @@
+I, [2020-02-20T21:16:47.368937 #81999]  INFO -- : Refreshing Gem list
+I, [2020-02-20T21:16:53.408713 #81999]  INFO -- : listening on addr=/Users/david/Desktop/JtStock/shared/sockets/unicorn.sock fd=13
+I, [2020-02-20T21:16:53.409087 #81999]  INFO -- : worker=0 spawning...
+I, [2020-02-20T21:16:53.411145 #81999]  INFO -- : worker=1 spawning...
+I, [2020-02-20T21:16:53.412302 #81999]  INFO -- : master process ready
+I, [2020-02-20T21:16:53.412856 #82001]  INFO -- : worker=0 spawned pid=82001
+I, [2020-02-20T21:16:53.413592 #82001]  INFO -- : worker=0 ready
+I, [2020-02-20T21:16:53.413721 #82002]  INFO -- : worker=1 spawned pid=82002
+I, [2020-02-20T21:16:53.414382 #82002]  INFO -- : worker=1 ready
+D, [2020-02-20T22:53:41.011110 #81999] DEBUG -- : waiting 16.0s after suspend/hibernation
+D, [2020-02-21T09:21:51.456673 #81999] DEBUG -- : waiting 16.0s after suspend/hibernation
+I, [2020-02-21T09:26:45.527225 #81999]  INFO -- : reaped #<Process::Status: pid 82002 exit 0> worker=1
+I, [2020-02-21T09:26:45.529232 #81999]  INFO -- : reaped #<Process::Status: pid 82001 exit 0> worker=0
+I, [2020-02-21T09:26:45.556393 #81999]  INFO -- : master complete

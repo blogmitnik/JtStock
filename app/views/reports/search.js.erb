@@ -25,6 +25,8 @@ $('#page-info').html("<%= j(render :partial => 'shared/page_info') %>");
 // Update pagination link
 <% if @reports.last_page? %>
 	$('.pagination').html("That's all, dude!");
+<% elsif params[:search_type] %>
+	$('.pagination').html("");
 <% else %>
 	//$('#paginator').html('<%= escape_javascript(paginate(@reports, :remote => true).to_s) %>');
 	$('#paginator').html('<%= escape_javascript(link_to_next_page(@reports, 'Load more reports', params: params, :remote => true).to_s) %>');
