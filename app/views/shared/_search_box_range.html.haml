@@ -61,6 +61,10 @@
            '過去 30 天': [moment().subtract(29, 'days'), moment()],
            '過去 60 天': [moment().subtract(59, 'days'), moment()]
         },
+        maxDate: end,
+        maxSpan: {
+          days: 7
+        },
         locale: {
           format: "YYYY-MM-DD",
           separator: " - "

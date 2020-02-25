@@ -1,8 +1,6 @@
 - if @reports.count > 0
   - if params[:commit].present? && params[:commit] == "Search"
-    在 #{@reports.current_page} / #{@reports.total_pages} 頁中，
-    顯示共 #{@reports.total_count / @distinct_date.count} 筆資料中的，
-    第 #{@reports.offset_value + 1} 到 #{@reports.offset_value + @reports.length / @distinct_date.count} 筆資料
+    共 #{@reports.total_count / @distinct_date.count} 筆資料
   - else
     在 #{@reports.current_page} / #{@reports.total_pages} 頁中，
     顯示共 #{@reports.total_count} 筆資料中的，

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20190125085518) do
+ActiveRecord::Schema.define(:version => 20200225020648) do
 
   create_table "active_admin_comments", :force => true do |t|
     t.string   "resource_id",   :null => false
@@ -62,6 +62,56 @@ ActiveRecord::Schema.define(:version => 20190125085518) do
 
   add_index "devices", ["user_id"], :name => "index_devices_on_user_id"
   add_index "devices", ["uuid"], :name => "index_devices_on_uuid"
+
+  create_table "mi_reports", :force => true do |t|
+    t.integer  "post_id",                          :null => false
+    t.integer  "yield_file_id",                    :null => false
+    t.integer  "station_id",                       :null => false
+    t.string   "stock_code",                       :null => false
+    t.string   "stock_name",                       :null => false
+    t.integer  "traded_volume",       :limit => 8, :null => false
+    t.integer  "total_transactions",  :limit => 8, :null => false
+    t.integer  "turnover",            :limit => 8, :null => false
+    t.float    "opening_price"
+    t.float    "highest_price"
+    t.float    "lowest_price"
+    t.float    "closing_price"
+    t.string   "ups_and_downs",                    :null => false
+    t.float    "change",                           :null => false
+    t.float    "last_best_bid_price"
+    t.integer  "last_best_bid_qty"
+    t.float    "last_best_ask_price"
+    t.float    "last_best_ask_qty"
+    t.float    "pice_earnings_ratio"
+    t.float    "shares_percentage",                :null => false
+    t.float    "closing_percentage",               :null => false
+    t.datetime "published_at",                     :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
+  end
+
+  add_index "mi_reports", ["closing_percentage"], :name => "index_mi_reports_on_closing_percentage"
+  add_index "mi_reports", ["closing_price"], :name => "index_mi_reports_on_closing_price"
+  add_index "mi_reports", ["highest_price"], :name => "index_mi_reports_on_highest_price"
+  add_index "mi_reports", ["last_best_ask_price"], :name => "index_mi_reports_on_last_best_ask_price"
+  add_index "mi_reports", ["last_best_ask_qty"], :name => "index_mi_reports_on_last_best_ask_qty"
+  add_index "mi_reports", ["last_best_bid_price"], :name => "index_mi_reports_on_last_best_bid_price"
+  add_index "mi_reports", ["last_best_bid_qty"], :name => "index_mi_reports_on_last_best_bid_qty"
+  add_index "mi_reports", ["lowest_price"], :name => "index_mi_reports_on_lowest_price"
+  add_index "mi_reports", ["opening_price"], :name => "index_mi_reports_on_opening_price"
+  add_index "mi_reports", ["pice_earnings_ratio"], :name => "index_mi_reports_on_pice_earnings_ratio"
+  add_index "mi_reports", ["post_id"], :name => "index_mi_reports_on_post_id"
+  add_index "mi_reports", ["published_at"], :name => "index_mi_reports_on_published_at"
+  add_index "mi_reports", ["shares_percentage"], :name => "index_mi_reports_on_shares_percentage"
+  add_index "mi_reports", ["station_id", "published_at"], :name => "index_mi_reports_on_station_id_and_published_at"
+  add_index "mi_reports", ["station_id"], :name => "index_mi_reports_on_station_id"
+  add_index "mi_reports", ["stock_code", "stock_name"], :name => "index_mi_reports_on_stock_code_and_stock_name"
+  add_index "mi_reports", ["stock_code"], :name => "index_mi_reports_on_stock_code"
+  add_index "mi_reports", ["stock_name"], :name => "index_mi_reports_on_stock_name"
+  add_index "mi_reports", ["total_transactions"], :name => "index_mi_reports_on_total_transactions"
+  add_index "mi_reports", ["traded_volume"], :name => "index_mi_reports_on_traded_volume"
+  add_index "mi_reports", ["turnover"], :name => "index_mi_reports_on_turnover"
+  add_index "mi_reports", ["yield_file_id"], :name => "index_mi_reports_on_yield_file_id"
 
   create_table "oauth_access_grants", :force => true do |t|
     t.integer  "resource_owner_id", :null => false

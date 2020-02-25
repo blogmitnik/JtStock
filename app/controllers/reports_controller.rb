@@ -142,8 +142,6 @@ class ReportsController < ApplicationController
             @worst_cp_dates.append(matched_dates)
           end
         else
-          the_date = "#{date_from}"
-          
           if params[:station] == ""
             latest_date = @reports_for_cart.maximum('published_at')
             @reports_for_cart = @reports_for_cart.where(published_at: latest_date)
@@ -170,8 +168,6 @@ class ReportsController < ApplicationController
         # Prevent duplicated importing file
         filename = sanitize_filename(file.original_filename)
         line_count = `wc -l "#{file.path}"`.strip.split(' ')[0].to_i - 1
-
-        puts line_count
 
         if YieldFile.exists?(file_name: filename)
           duplicated_files << file

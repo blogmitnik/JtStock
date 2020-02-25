@@ -1,7 +1,7 @@
 require 'csv'
 require 'fileutils'
 
-desc "This task is for importing csv files into BFIAMU database"
+desc "This task is for importing BFIAMU csv files into database"
 task :import_bfiamu, [:filename] => :environment do
 	puts "Fetching csv files from folder..."
 	imported_files = []
