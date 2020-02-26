@@ -31,6 +31,8 @@ Bestmix::Application.routes.draw do
 
   resources :posts
 
+  resources :mi_reports, only: [:create]
+
   resources :reports, only: [:create] do
     get :autocomplete_station, :on => :collection
     get :autocomplete_config, :on => :collection

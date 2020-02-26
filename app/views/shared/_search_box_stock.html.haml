@@ -1,0 +1,96 @@
+.entry-meta.row
+  %aside.meta-details
+    %h4 按日期查詢分類指數的證券資料
+    #date-range
+      = render :partial => "shared/date_range"
+    #search.searchBox
+      = form_tag search_my_post_reports_path(@post, build: params[:build]), method: :get, remote: true, id: "search-reports", class: 'row' do
+        .col-sm-12.col-md-3.inner-addon.left-addon
+          = select("station", "id", Station.all.collect { |s| [ s.name, s.id ] }, {prompt: '選擇分類指數'}, {class: "selectpicker form-control", id: "station-picker", "data-live-search"=>"true", "data-style"=>"btn-lg btn-primary"})
+          / %i.glyphicon.glyphicon-tags
+          / - if controller.controller_name == 'stations'
+          /   = autocomplete_field_tag :station, '', autocomplete_station_name_my_post_reports_path(@post), class: 'form-control input-lg uneditable-input', value: "#{@station.name}", readonly: true
+          /   = hidden_field_tag :from_station, "#{@station.id}"
+          / - else
+          /   = autocomplete_field_tag :station, '', autocomplete_station_name_my_post_reports_path(@post), class: 'form-control input-lg', placeholder: '分類指數'
+
+        .col-xs-12.col-sm-3.col-md-3.inner-addon.left-addon
+          %i.glyphicon.glyphicon-calendar
+          = text_field_tag :date, params[:date], id: 'search-date-fix', class: 'date-input-box date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期', disabled: true
+        / .col-xs-6.col-sm-3.col-md-3.inner-addon.left-addon
+        /   %i.glyphicon.glyphicon-calendar
+        /   = text_field_tag :date2, params[:date2], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期2'
+        / .col-xs-6.col-sm-3.col-md-3.inner-addon.left-addon
+        /   %i.glyphicon.glyphicon-calendar
+        /   = text_field_tag :date3, params[:date3], id: 'search-date-fix', class: 'date-fix form-control input-lg', autocomplete: 'off', placeholder: '選擇日期3'
+
+        .col-xs-12.col-sm-6.col-md-6
+          = hidden_field_tag :commit, "Search"
+          = hidden_field_tag :search_type, "Stock"
+          %button#search-button.btn.btn-success.btn-lg.btn-block.tclick.ladda-button{:type => "submit", "data-style" => "expand-right", :disabled => true}
+            %span.glyphicon.glyphicon-search
+            查詢證券資料
+
+:javascript
+  $(function() {
+    $('select').on('change', function () {
+      var isSelected = !this.options[this.selectedIndex].defaultSelected;
+      if (isSelected) {
+          $('.date-input-box').removeAttr('disabled');
+      }
+    });
+    Ladda.bind( '.searchBox button[type=submit]' );
+    $('button[type=submit]').click(function(e){
+      $(document).ajaxStart(function(){
+        $("#date-selector").fadeTo("fast", 0.3);
+        $(".record_lists").fadeTo("fast", 0.3);
+        $(".chart_section").fadeTo("fast", 0.3);
+      });
+      $(document).ajaxStop(function(){
+        Ladda.stopAll();
+        $("#date-selector").fadeTo("fast", 1.0);
+        $(".record_lists").fadeTo("fast", 1.0);
+        $(".chart_section").fadeTo("fast", 1.0);
+      });
+    });
+
+    var start = moment().subtract(0, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('input[class="fix-date"]').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+
+    $('input[id="search-date-fix"]').daterangepicker({
+        autoUpdateInput: false,
+        singleDatePicker: true,
+        locale: {
+          format: "YYYY-MM-DD",
+          separator: " - "
+        }
+    });
+
+    $('input[id="search-date-fix"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('YYYY-MM-DD'));
+
+      $('button#search-button').removeAttr('disabled');
+    });
+
+    $('input[id="search-date-fix"]').change(function() {
+      var empty = true;
+      $('form > input').each(function() {
+        if ($(this).val() !== '') {
+          empty = false;
+        }
+      });
+
+      if (empty) {
+          $('button#search-button').attr('disabled', 'disabled');
+      } else {
+          $('button#search-button').removeAttr('disabled');
+      }
+    });
+
+    cb(start, end);
+
+  });

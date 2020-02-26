@@ -10,7 +10,7 @@ class Report < ActiveRecord::Base
   validates :post_id, :yield_file_id, :station_id, :station_name, :traded_shares_num, :turnover, :total_transactions, :advance_decline_idx, :shares_percentage, :closing_percentage, :published_at, :p_year, :p_month, :p_date, presence: true
 
   # Set yield report records per page
-  paginates_per 90
+  paginates_per 1000
 
   before_validation do
     if published_at

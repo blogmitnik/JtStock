@@ -25,8 +25,8 @@ module ApplicationHelper
   end
 
   def get_config_counts(report)
-    return Report.where('post_id = ? AND config != ? AND station_name = ? AND published_at = ?', 
-      report.post_id, 'ALL', report.station_name, report.published_at).count
+    return MiReport.where('post_id = ? AND station_id = ? AND published_at = ?', 
+      report.post_id, report.station_id, report.published_at).count
   end
 
   def get_main_mini_config_counts(report)

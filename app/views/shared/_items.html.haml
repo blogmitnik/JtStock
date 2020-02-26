@@ -1,13 +1,17 @@
 - build_type = params[:build].nil? ? "" : " (" + params[:build].to_s.upcase + ")"
 
-- if params[:commit].present? && params[:commit] == "Search" && @distinct_date.count > 1
+- if controller.controller_name == 'configs' && params[:report_id].present?
+  = render :partial => "configs/config_items"
+- elsif params[:commit].present? && params[:commit] == "Search" && params[:search_type] == "Stock"
+  = render :partial => "configs/config_items"
+- elsif params[:commit].present? && params[:commit] == "Search" && @distinct_date.count > 1
   - if params[:search_type].present? && params[:search_type] == "Range"
     / Search from Date Range SearchBox
     %table#report_lists.table.table-small-font.table-hover.table-striped.table-condensed.dt-responsive.not_infinite-table{:style => "width:100%;"}
       %thead
         %tr
           %th 順序
-          %th 分類指數名稱
+          %th 分類指數
           %th 最大股數百分比
           %th 最小股數百分比
           %th 最大成交百分比
@@ -169,7 +173,7 @@
       %thead
         %tr.summarize_table_index
           %th 順序
-          %th 分類指數名稱
+          %th 分類指數
           %th 成交股數
           %th 成交金額
           %th 成交筆數
@@ -203,8 +207,15 @@
               = report.station_id
 
             %td{:style => "vertical-align: middle;"}
-              %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down"}
-                = report.station_name
+              - if get_config_counts(report) > 0
+                %a.progress-load{:href => my_post_report_configs_path(@post, report)}
+                  %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down", "data-content" => "查看#{report.published_at.to_date.strftime('%Y-%m-%d').to_s}的證券", "data-toggle" => "popover", "data-placement" => "bottom", "data-trigger" => "hover", :type => "button"}
+                    = report.station_name.gsub("指數", "")
+                    %span.badge= get_config_counts(report)
+              - else
+                %button.btn.btn-sm.btn-primary{"data-content" => "要查看該日期的證券資料，請下載並匯入對應的CSV文件！", "title" => "沒有證券資料", "data-toggle" => "popover", "data-placement" => "bottom", "data-trigger" => "hover", :type => "button"}
+                  = report.station_name.gsub("指數", "")
+                  %span.badge= get_config_counts(report)
 
             %td{:style => "vertical-align: middle;"}
               = report.traded_shares_num
@@ -396,7 +407,7 @@
     %thead
       %tr
         %th 順序
-        %th 分類指數名稱
+        %th 分類指數
         %th 成交股數
         %th 成交金額
         %th 成交筆數
@@ -411,8 +422,15 @@
             = report.station_id
 
           %td{:style => "vertical-align: middle;"}
-            %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down"}
-              = report.station_name
+            - if get_config_counts(report) > 0
+              %a.progress-load{:href => my_post_report_configs_path(@post, report)}
+                %button.btn.btn-sm.btn-primary.ladda-button{"data-style" => "slide-down", "data-content" => "查看#{report.published_at.to_date.strftime('%Y-%m-%d').to_s}的證券資料", "data-toggle" => "popover", "data-placement" => "bottom", "data-trigger" => "hover", :type => "button"}
+                  = report.station_name.gsub("指數", "")
+                  %span.badge= get_config_counts(report)
+            - else
+              %button.btn.btn-sm.btn-primary{"data-content" => "要查看該日期的證券資料，請下載並匯入對應的CSV文件！", "title" => "沒有證券資料", "data-toggle" => "popover", "data-placement" => "bottom", "data-trigger" => "hover", :type => "button"}
+                = report.station_name.gsub("指數", "")
+                %span.badge= get_config_counts(report)
 
           %td{:style => "vertical-align: middle;"}
             = report.traded_shares_num

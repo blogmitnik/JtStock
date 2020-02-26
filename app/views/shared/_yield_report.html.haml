@@ -5,7 +5,7 @@
     .row
       .col.col-xs-4
         %span.glyphicon.glyphicon-stats
-        數據總覽
+        分類指數總覽
       .col.col-xs-8.text-right
         / .btn-group
         /   #dropdown-product-selector
@@ -34,36 +34,41 @@
           %li.active{:role => "presentation"}
             %a{"aria-controls" => "multidates-search", "data-toggle" => "tab", :href => "#multidates-search", :role => "tab"}
               %span.glyphicon.glyphicon-th-list
-              多個日期
+              多日期比較
           %li{:role => "presentation"}
             %a{"aria-controls" => "daterange-search", "data-toggle" => "tab", :href => "#daterange-search", :role => "tab"}
               %span.glyphicon.glyphicon-th-large
-              連續日期
+              連續日期比較
+          %li{:role => "presentation"}
+            %a{"aria-controls" => "stock-search", "data-toggle" => "tab", :href => "#stock-search", :role => "tab"}
+              %span.glyphicon.glyphicon-search
+              查詢證券資料
 
         .tab-content
           #multidates-search.tab-pane.fade.in.active{:role => "tabpanel"}
             = render :partial => "shared/search_box"
           #daterange-search.tab-pane.fade{:role => "tabpanel"}
             = render :partial => "shared/search_box_range"
-
+          #stock-search.tab-pane.fade{:role => "tabpanel"}
+            = render :partial => "shared/search_box_stock"
 
     / 分類指數百分比視覺圖表
     - if controller.controller_name == 'reports'
       - if params[:config].present? && params[:config] != ""
         #yield-ratio-chart-data.chart_section{:style => "margin-bottom: 20px"}
           = render :partial => "configs/config_yield_chart"
-      - elsif params[:station].present? && params[:station] != ""
+      - elsif params[:station].present? && params[:search_type].present?
         #station-yield-cart.chart_section{:style => "margin-bottom: 20px"}
-          = render :partial => "stations/station_yield_cart"
+          = render :partial => "configs/best_percentage_cart"
       - else
         #worst-yield-cart.chart_section{:style => "margin-bottom: 20px"}
           = render :partial => "my_posts/worst_yield_cart"
     - elsif controller.controller_name == 'my_posts'
       #worst-yield-cart.chart_section{:style => "margin-bottom: 20px"}
         = render :partial => "my_posts/worst_yield_cart"
-    - elsif controller.controller_name == 'stations'
-      #station-yield-cart.chart_section{:style => "margin-bottom: 20px"}
-        = render :partial => "stations/station_yield_cart"
+    / - elsif controller.controller_name == 'stations'
+    /   #station-yield-cart.chart_section{:style => "margin-bottom: 20px"}
+    /     = render :partial => "stations/station_yield_cart"
 
     / Date Range Slider Box
     / .entry-meta.row
@@ -85,7 +90,7 @@
 
     / 'Load more report' button
     #paginator
-      = link_to_next_page @reports, 'Load more data', params: params, remote: true
+      = link_to_next_page @reports, '載入更多資料', params: params, remote: true
     
   .panel-footer
     .row

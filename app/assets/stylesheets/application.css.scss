@@ -29,6 +29,7 @@
 @import "iThing";
 @import "rwd-table";
 @import "fileinput";
+@import "bootstrap-select";
 
 body {
   padding-top: 60px;
@@ -470,7 +471,7 @@ form {
   font-size: 14px;
   line-height: 1.428571429;
   color: #000;
-  opacity: 0.6;
+  opacity: 1.0;
   background-color: #fff;
   background-image: none;
   border: 1px solid #888;

@@ -2,8 +2,8 @@
   - if params[:no_date_range].nil?
     %li.active{:role => "presentation"}
       %a{:href => url_for(:controller => controller.controller_name, :action => controller.action_name, :from_report => 'all', :from_report => params[:from_report]), "data-remote" => "true"}
-        %span.glyphicon.glyphicon-cog
-        All Configs
+        %span.glyphicon.glyphicon-book
+        證券資料
         - if current_page?(:controller => controller.controller_name, :action => controller.action_name, :page => params[:page])
           %span.badge= @reports_for_cart.count.to_i
   - else

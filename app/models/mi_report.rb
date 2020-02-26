@@ -9,6 +9,23 @@ class MiReport < ActiveRecord::Base
   belongs_to :station
   validates :post_id, :yield_file_id, :station_id, :stock_code, :stock_name, :traded_volume, :total_transactions, :turnover, :opening_price, :highest_price, :lowest_price, :closing_price, :ups_and_downs, :change, :last_best_bid_price, :last_best_bid_qty, :last_best_ask_price, :last_best_ask_qty, :pice_earnings_ratio, :shares_percentage, :closing_percentage, :published_at, :created_at, :updated_at, presence: true
 
+  # Set yield report records per page
+  paginates_per 1000
+
+  def self.group_sp_by_date(date_time)
+    reports = where("published_at = ?", date_time)
+    reports = reports.group("stock_name")
+    reports = reports.select("stock_name, max(shares_percentage) as best_shares_percentage")
+    reports = reports.order("best_shares_percentage DESC")
+  end
+
+  def self.group_cp_by_date(date_time)
+    reports = where("published_at = ?", date_time)
+    reports = reports.group("stock_name")
+    reports = reports.select("stock_name, max(closing_percentage) as best_closing_percentage")
+    reports = reports.order("best_closing_percentage DESC")
+  end
+
   # The 'import' function can be used both on web and rake script
   def self.import_data(file, filename, post)
     # Check filename

@@ -3,17 +3,37 @@
 .panel.panel-default
   .panel-heading
     %span.glyphicon.glyphicon-list
-    = "Yield Report Overview"
+      證券資料總覽
 
   .panel-body
-    #search-box
-      = render :partial => "shared/search_box"
+    / #search-box
+    /   %ul.nav.nav-tabs{:role => "tablist"}
+    /     %li.active{:role => "presentation"}
+    /       %a{"aria-controls" => "multidates-search", "data-toggle" => "tab", :href => "#multidates-search", :role => "tab"}
+    /         %span.glyphicon.glyphicon-th-list
+    /         多個日期
+    /     %li{:role => "presentation"}
+    /       %a{"aria-controls" => "daterange-search", "data-toggle" => "tab", :href => "#daterange-search", :role => "tab"}
+    /         %span.glyphicon.glyphicon-th-large
+    /         連續日期
+
+    /   .tab-content
+    /     #multidates-search.tab-pane.fade.in.active{:role => "tabpanel"}
+    /       = render :partial => "shared/search_box"
+    /     #daterange-search.tab-pane.fade{:role => "tabpanel"}
+    /       = render :partial => "shared/search_box_range"
+
     #yield-ratio-chart-data{:style => "margin-bottom: 20px"}
-      = render :partial => "yield_ratio_chart"
+      = render :partial => "configs/best_percentage_cart"
     #tab-selector
       = render :partial => "shared/tab_selector"
     #yield-items
-      = render :partial => "shared/yield_items"
+      .table-responsive.record_lists
+        #report_lists_filter
+          %button.btn.btn-default{"data-toggle" => "modal", :href => "#importCSV"}
+            %span.glyphicon.glyphicon-cloud-upload{"aria-hidden" => "true"}
+            匯入CSV資料
+        = render :partial => "shared/items", :object => @reports
       
   .panel-footer
     .row
@@ -23,4 +43,38 @@
       .col.col-xs-7
         #paginator
           //= paginate @reports, remote: true
-          = link_to_next_page @reports, 'Load more reports', params: params, remote: true
+          = link_to_next_page @reports, '載入更多資料', params: params, remote: true
+
+/ Import file modal
+= render :partial => "shared/csv_importer"
+
+:javascript
+  $(document).ready(function(){
+
+    $(window).scroll(function () {
+      more_reports_url = $('#paginator a[rel=next]').attr('href');
+      if (more_reports_url && $(window).scrollTop() > $(document).height() - $(window).height() - 200) {
+        $('#paginator').html('<div class="loading">正在載入資料...</div>');
+        $.getScript(more_reports_url);
+      }
+      if ($(this).scrollTop() > 2500) {
+        $('#back-to-top').fadeIn();
+      }
+      else {
+        $('#back-to-top').fadeOut();
+      }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+      $('#back-to-top').tooltip('hide');
+      $('body,html').animate({
+        scrollTop: 0
+      }, 800);
+      return false;
+    });    
+    $('#back-to-top').tooltip('show');
+    // Click the Load more report button
+    $('#paginator').click(function () {
+      $('#paginator').html('<div class="loading">Loading reports...</div>');
+    });
+  });

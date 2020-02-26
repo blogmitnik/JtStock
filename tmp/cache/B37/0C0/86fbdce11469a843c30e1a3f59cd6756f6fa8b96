@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582537612.595924:@value"‚[I"{(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624714.63414:@value"‚[I"{(function() {
   window.ActiveAdmin = {};
 
   if (!window.AA) {

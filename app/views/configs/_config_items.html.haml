@@ -1,0 +1,258 @@
+%table#report_lists.table.table-small-font.table-hover.table-striped.dt-responsive.infinite-table{:style => "width:100%;"}
+  %thead
+    %tr
+      %th 代號
+      %th 名稱
+      %th 成交股數
+      %th 成交筆數
+      %th 成交金額
+      %th 開盤價
+      %th 最高價
+      %th 最低價
+      %th 收盤價
+      %th 漲跌價差
+      %th 成交股數比(%)
+      %th 成交金額比(%)
+      %th 最後揭示買價
+      %th 最後揭示買量
+      %th 最後揭示賣價
+      %th 最後揭示賣量
+      %th 本益比
+  %tbody
+    / Data from mi_report model
+    - @reports.each do |report|
+      %tr.data-content
+        %td{:style => "vertical-align: middle;"}
+          %span.label.label-info
+            = report.stock_code
+
+        %td{:style => "vertical-align: middle;"}
+          = report.stock_name
+
+        %td{:style => "vertical-align: middle;"}
+          = report.traded_volume
+
+        %td{:style => "vertical-align: middle;"}
+          = report.total_transactions
+
+        %td{:style => "vertical-align: middle;"}
+          = report.turnover
+
+        %td{:style => "vertical-align: middle;"}
+          = report.opening_price
+
+        %td{:style => "vertical-align: middle;"}
+          = report.highest_price
+
+        %td{:style => "vertical-align: middle;"}
+          = report.lowest_price
+
+        %td{:style => "vertical-align: middle;"}
+          = report.closing_price
+
+        %td{:style => "vertical-align: middle;"}
+          =render_up_down((report.ups_and_downs + report.change.to_s).to_f)
+
+        %td{:style => "vertical-align: middle;"}
+          = report.shares_percentage
+
+        %td{:style => "vertical-align: middle;"}
+          = report.closing_percentage
+
+        %td{:style => "vertical-align: middle;"}
+          = report.last_best_bid_price
+
+        %td{:style => "vertical-align: middle;"}
+          = report.last_best_bid_qty
+
+        %td{:style => "vertical-align: middle;"}
+          = report.last_best_ask_price
+
+        %td{:style => "vertical-align: middle;"}
+          = report.last_best_ask_qty
+
+        %td{:style => "vertical-align: middle;"}
+          = report.pice_earnings_ratio
+
+:javascript
+  jQuery(function() {
+    initPage();
+    $('#report_lists_filter input[type=search]').attr("placeholder", "以代號或證券名稱過濾");
+  });
+
+  $(window).bind('page:load', function() {
+    initPage();
+  });
+
+  function initPage() {
+    // Bind progress buttons and simulate loading progress
+    //Ladda.bind( '#report_lists button', { timeout: 2000 } );
+    Ladda.bind( '#report_lists button', {
+      callback: function( instance ) {
+        var progress = 0;
+        var interval = setInterval( function() {
+          progress = Math.min( progress + Math.random() * 0.1, 1 );
+          instance.setProgress( progress );
+
+          if( progress === 1 ) {
+            instance.stop();
+            clearInterval( interval );
+          }
+        }, 200 );
+      }
+    });
+
+    // hide spinner
+    $(".sk-three-bounce").hide();
+
+    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
+    $('.dropdown-toggle').dropdown();
+
+    $('.table-responsive').responsiveTable({
+      pattern: 'priority-columns',
+      addFocusBtn: false
+    });
+
+    $("#report_lists").dataTable({
+      retrieve: true,
+      destroy: true,
+      responsive: true,
+      paging: false,
+      searching: true,
+      info: false,
+      lengthChange: false,
+      dom: 'Bfrtip',
+      fixedHeader: {
+        header: false,
+        footer: false
+      },
+      buttons: [
+        {
+          extend: 'print',
+          bom : true,
+          text: '<span class="glyphicon glyphicon-print"></span> Print',
+          titleAttr: 'Print'
+        },
+        {
+          extend: 'csvHtml5',
+          bom : true,
+          text: '<span class="glyphicon glyphicon-export"></span> CSV',
+          titleAttr: 'Export to CSV'
+        },
+        {
+          extend: 'pdfHtml5',
+          bom : true,
+          text: '<span class="glyphicon glyphicon-export"></span> PDF',
+          titleAttr: 'Export to PDF',
+          orientation: 'landscape',
+          pageSize: 'LEGAL'
+        }
+      ],
+      columns: [
+        {
+          width: "null",
+          className: "row_config",
+          orderable: true,
+          searchable: true,
+          responsivePriority: 1
+        }, {
+          width: "null",
+          className: "row_config",
+          orderable: false,
+          searchable: true,
+          responsivePriority: 2
+        }, {
+          width: "null",
+          className: "row_config",
+          orderable: true,
+          searchable: false,
+          responsivePriority: 3
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 4
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 5
+        }, {
+          width: "null",
+          className: "center",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 6
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 7
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 8
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 9
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 10
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 11
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: false,
+          responsivePriority: 12
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 13
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 14
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 15
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 16
+        }, {
+          width: "null",
+          className: "row_config",
+          searchable: false,
+          orderable: true,
+          responsivePriority: 17
+        }
+      ]
+    });
+  }

@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582537613.735751:@value"Ü[I"Î$(document).ready(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624715.84747:@value"Ü[I"Î$(document).ready(function() {
   var switched = false;
   var updateTables = function() {
     if (($(window).width() < 767) && !switched ){

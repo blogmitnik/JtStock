@@ -1,6 +1,6 @@
 - build_type = params[:build].nil? ? "" : " (" + params[:build].to_s.upcase + ")"
 
-%h4 按日期比較各分類指數資料
+/ %h4 按日期比較各分類指數資料
 
 - if @reports_for_cart.count > 0
   - if params[:date1].present? || params[:date2].present? || params[:date3].present?

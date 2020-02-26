@@ -4,10 +4,31 @@
       .modal-header
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} &times;
-        %h4.modal-title 匯入CSV資料
+        %h4.modal-title 手動匯入CSV文件
+
       .modal-body
-        %span.glyphicon.glyphicon-download-alt
-        %strong 請從本地端目錄選取CSV文件
-        %p.text-danger 請選取CSV文件，或是包含所有CSV文件的整個目錄 (後者僅支持Chrome)
-        #import-yield-report
-          = render :partial => "shared/import_form"
+        %ul.nav.nav-pills.mb-3{:role => "tablist"}
+          %li.active{:role => "presentation"}
+            %a{"aria-controls" => "bfiamu-import-tab", "data-toggle" => "pill", :href => "#bfiamu-import-tab", :role => "tab"}
+              匯入指數資料
+          %li{:role => "presentation"}
+            %a{"aria-controls" => "mi-index-import-tab", "data-toggle" => "pill", :href => "#mi-index-import-tab", :role => "tab"}
+              匯入證券資料
+
+        .tab-content
+          #bfiamu-import-tab.tab-pane.fade.in.active{:role => "tabpanel"}
+            %h5 請從本地端目錄選取CSV文件
+            %p.text-danger *欲匯入[指數資料]，請從台灣證券交易所網站，下載CSV格式文件到你的文件夾裡，然後選取檔名格式為"YYYYMMDD.csv"的文件（例如：20200226.csv），或是選取一個包含所有正確格式CSV文件的整個文件夾，來批次匯入多個文件 (後者僅支持Chrome)
+            #import-yield-report
+              = render :partial => "shared/import_form"
+
+          #mi-index-import-tab.tab-pane.fade{:role => "tabpanel"}
+            %h5 請從本地端目錄選取CSV文件
+            %p.text-danger *欲匯入[證券資料]，請從台灣證券交易所網站，下載CSV格式文件到你的文件夾裡，然後選取檔名格式為"MI-INDEX-NN-YYYYMMDD.csv"的文件（例如：MI-INDEX-01-20200226.csv），或是選取一個包含所有正確格式CSV文件的整個文件夾，來批次匯入多個文件 (後者僅支持Chrome)
+            %small
+              檔名中的 NN 是分類指數編號（01~31，沒有19），編號對應的指數類型如下：
+              %br
+              01水泥工業、02食品工業、03塑膠工業、04紡織纖維、05電機機械、06電器電纜、07化學生技醫療、08玻璃陶瓷、09造紙工業、10鋼鐵工業、11橡膠工業、12汽車工業、13電子工業、14建材營造、15航運業、16觀光事業、17金融保險、18貿易百貨、20其他、21化學工業、22生技醫療業、23油電燃氣業、24半導體業、25電腦及週邊設備業、26光電業、27通信網路業、28電子零組件業、29電子通路業、30資訊服務業、31其他電子業
+              %br
+            #import-yield-report
+              = render :partial => "shared/mi_import_form"

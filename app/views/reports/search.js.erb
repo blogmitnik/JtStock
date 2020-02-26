@@ -29,5 +29,5 @@ $('#page-info').html("<%= j(render :partial => 'shared/page_info') %>");
 	$('.pagination').html("");
 <% else %>
 	//$('#paginator').html('<%= escape_javascript(paginate(@reports, :remote => true).to_s) %>');
-	$('#paginator').html('<%= escape_javascript(link_to_next_page(@reports, 'Load more reports', params: params, :remote => true).to_s) %>');
+	$('#paginator').html('<%= escape_javascript(link_to_next_page(@reports, '載入更多資料', params: params, :remote => true).to_s) %>');
 <% end %>

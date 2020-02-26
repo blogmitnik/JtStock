@@ -2,7 +2,7 @@
 $('#paginator').html('<%= escape_javascript(paginate(@reports, :remote => true).to_s) %>');
 $('#paginator-top').html('<%= escape_javascript(paginate(@reports, :remote => true).to_s) %>');
 $('#page-info').html("<%= j(render :partial => 'shared/page_info_scroll') %>");
-$(".pagination").rPage();
+$("#paginator .pagination").rPage();
 
 // Append new report data
 $("<%=j render(:partial => 'shared/items', :object => @reports) %>").appendTo($(".infinite-table"));

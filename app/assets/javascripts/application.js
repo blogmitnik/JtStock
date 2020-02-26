@@ -40,6 +40,7 @@
 //= require morris
 //= require jquery-ui/datepicker
 //= require datepicker
+//= require bootstrap-select
 //= require moment
 //= require daterangepicker
 //= require responsive-paginate

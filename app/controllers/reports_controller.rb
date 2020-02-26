@@ -32,7 +32,7 @@ class ReportsController < ApplicationController
   def search
     @posts = Post.find(:all)
     @post = Post.find(params[:my_post_id]) if params[:my_post_id]
-    @station = @post.stations.find_by_name(params[:station]) if params[:station]
+    @station = @post.stations.find_by_id(params[:station]["id"]) if params[:station]
     page = (params[:page] || 1).to_i
 
     # For rendering contents by click tab after search
@@ -73,6 +73,7 @@ class ReportsController < ApplicationController
       date_to = params[:date_range][13, 10] if params[:date_range]
       fix_datetime = params[:no_date_range] if params[:no_date_range]
 
+      date = params[:date] if params[:date]
       date1 = params[:date1] if params[:date1]
       date2 = params[:date2] if params[:date2]
       date3 = params[:date3] if params[:date3]
@@ -99,7 +100,7 @@ class ReportsController < ApplicationController
         @reports = report_for_tmp.order("station_id ASC, published_at ASC").page(page)
         @reports_summarize = @reports_for_cart.group_by(&:station_name)
       # Date Range Search
-      elsif date_from.present? && date_to.present? && search_type.present?
+      elsif date_from.present? && date_to.present? && search_type.present? && search_type == "Range"
         if date_from != date_to # Search for multiple days (ex. Jun 20 ~ Jun 23)
           dates_for_filter = []
           search_date_range = ("#{date_from}".."#{date_to}")
@@ -147,6 +148,14 @@ class ReportsController < ApplicationController
             @reports_for_cart = @reports_for_cart.where(published_at: latest_date)
           end
         end
+      elsif date.present? && search_type.present? && search_type == "Stock"
+        #@station_id = params[:station_id]["id"]
+        @reports_for_cart = MiReport.where(post_id: @post)
+        @reports_for_cart = @reports_for_cart.where(station_id: @station.id, published_at: date)
+        @reports = @reports_for_cart.order("stock_code ASC").page(page)
+        @distinct_date = @reports_for_cart.select("distinct(published_at)")
+
+        puts @distinct_date.count
       end
     end
   end
