@@ -4,12 +4,12 @@ class ApplicationController < ActionController::Base
   class Forbidden < ActionController::ActionControllerError; end
   class IpAddressRejected < ActionController::ActionControllerError; end
 
-  # rescue_from Exception, with: :rescue500
-  # rescue_from Forbidden, with: :rescue403
-  # rescue_from IpAddressRejected, with: :rescue403
-  # rescue_from ActionController::RoutingError, with: :rescue404
-  # rescue_from ActiveRecord::RecordNotFound, with: :rescue404
-  # rescue_from Timeout::Error, with: :rescue524
+  rescue_from Exception, with: :rescue500
+  rescue_from Forbidden, with: :rescue403
+  rescue_from IpAddressRejected, with: :rescue403
+  rescue_from ActionController::RoutingError, with: :rescue404
+  rescue_from ActiveRecord::RecordNotFound, with: :rescue404
+  rescue_from Timeout::Error, with: :rescue524
 
   private
 
