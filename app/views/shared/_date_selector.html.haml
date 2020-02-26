@@ -41,24 +41,14 @@
     /           %span.badge= @reports_for_cart.count.to_i
 
     / Show tab for Search results
-    - if !params[:date_range].nil?
-      %li.active{:role => "presentation"}
-        %a{:href => "#"}
-          %span.glyphicon.glyphicon-search
-          搜尋結果
-          %span.badge
-            連續
-            = @distinct_date.count
-            天比較
-
-    - if !params[:date1].nil? || !params[:date2].nil? || !params[:date3].nil?
+    - if !params[:date_range].nil? || !params[:date1].nil? || !params[:date2].nil? || !params[:date3].nil?
       %li.active{:role => "presentation"}
         %a{:href => "#"}
           %span.glyphicon.glyphicon-search
           搜尋結果
           %span.badge
             = @distinct_date.count
-            個日期比較
+            天有資料
 
     - if !params[:station].nil? && !params[:search_type].nil?
       %li.active{:role => "presentation"}

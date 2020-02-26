@@ -32,6 +32,10 @@
             查詢證券資料
 
 :javascript
+  $(document).ready(function(){
+    $('select').selectpicker();
+  });
+
   $(function() {
     $('select').on('change', function () {
       var isSelected = !this.options[this.selectedIndex].defaultSelected;
