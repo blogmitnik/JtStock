@@ -1,10 +1,10 @@
 - navigation_add 'Modules', my_posts_path
-- navigation_add 'File Manager', my_post_yield_files_path(@post)
+- navigation_add 'File Browser', my_post_yield_files_path(@post)
 - navigation_add @file.file_name, my_post_yield_file_path(@post, @file)
 
 %header.page-header
   %h2= @file.file_name
-  %p.lead All yield records belong to selected yield report file
+  %p.lead 預覽此文件包含的資料
   
 .row
   .container
@@ -12,7 +12,7 @@
       .panel.panel-default
         .panel-heading
           %span.glyphicon.glyphicon-list
-          = "Yield records from the file"
+          = "快速預覽文件"
         .panel-body
           #yield-items
             = render :partial => "shared/yield_items"

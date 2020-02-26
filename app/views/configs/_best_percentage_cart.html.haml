@@ -22,7 +22,7 @@
             %span.badge-category-bg{:style => "background-color: #1fbba6;"}
             %span.badge-category 多量佔比 (50.00 ~ 100 %)
 
-        = content_tag :div, "", id: "best-shares-p-yield-data", data: {reports: config_best_percentage_chart_data(@reports_for_cart)}
+        = content_tag :div, "", id: "best-shares-p-yield-data", data: {reports: config_best_percentage_chart_data(@reports_for_cart, @station)}
       - else
         .well{:style => "margin-top: 10px;"}
           .blankslate.text-center
@@ -45,7 +45,7 @@
             %span.badge-category-bg{:style => "background-color: #4da74d;"}
             %span.badge-category 多量佔比 (50.00 ~ 100 %)
 
-        = content_tag :div, "", id: "best-closing-p-yield-data", data: {reports: config_best_percentage_chart_data(@reports_for_cart)}
+        = content_tag :div, "", id: "best-closing-p-yield-data", data: {reports: config_best_percentage_chart_data(@reports_for_cart, @station)}
       - else
         .well{:style => "margin-top: 10px;"}
           .blankslate.text-center

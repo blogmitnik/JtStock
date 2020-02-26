@@ -2,7 +2,7 @@
 - navigation_add 'File Browser', my_post_yield_files_path(@post)
 
 %h2.page-header
-  File Browser
+  瀏覽文件
 
 .row
   .product-lists
@@ -16,30 +16,30 @@
             .col.col-xs-6.text-right
               %button.btn.btn-default.btn-xs.button-filter{:type => "button"}
                 %span.glyphicon.glyphicon-filter
-                Filter
+                過濾器
 
         .panel-body
           - if @files.count > 0
             .pull-right
               .table
-                / .btn-group
-                /   %button.btn.btn-success.btn-filter{"data-target" => "Sum-All", :type => "button", "data-toggle" => "tooltip", :title => "Show Sum-All files"} Sum-All
-                /   %button.btn.btn-warning.btn-filter{"data-target" => "Sum-Config", :type => "button", "data-toggle" => "tooltip", :title => "Show Sum-Config files"} Sum-Config
-                /   %button.btn.btn-danger.btn-filter{"data-target" => "Sum-Main", :type => "button", "data-toggle" => "tooltip", :title => "Show Sum-Main files"} Sum-Main
-                /   %button.btn.btn-info.btn-filter{"data-target" => "Sum-Min", :type => "button", "data-toggle" => "tooltip", :title => "Show Sum-Min files"} Sum-Min
-                /   %button.btn.btn-default.btn-filter{"data-target" => "all", :type => "button", "data-toggle" => "tooltip", :title => "All files"} Show all
-                / .btn-group
-                /   %a.dont_show{id: "delete-selected-files", "data-build-name" => "#{@post.title}", "data-build-id" => "#{@post.id}", :href => "#"}
-                /     %button.btn.btn-danger{"data-toggle" => "tooltip", :title => "Delete selected files"}
-                /       %span.glyphicon.glyphicon-trash{"aria-hidden" => "true"}
-                /       Delete
+                .btn-group
+                  %button.btn.btn-danger.btn-filter{"data-target" => "MI-INDEX", :type => "button", "data-toggle" => "tooltip", :title => "證券資料的文件"} 證券資料
+                  %button.btn.btn-info.btn-filter{"data-target" => "BFIAMU", :type => "button", "data-toggle" => "tooltip", :title => "分類指數的文件"} 分類指數
+                  %button.btn.btn-default.btn-filter{"data-target" => "all", :type => "button", "data-toggle" => "tooltip", :title => "所有類型文件"} 全部類型
+                
+                .btn-group
+                  %a.dont_show{id: "delete-selected-files", "data-build-name" => "#{@post.title}", "data-build-id" => "#{@post.id}", :href => "#"}
+                    %button.btn.btn-danger{"data-toggle" => "tooltip", :title => "刪除文件"}
+                      %span.glyphicon.glyphicon-trash{"aria-hidden" => "true"}
+                      刪除
                 .btn-group
                   %button.btn.btn-primary{"data-toggle" => "modal", :href => "#importCSV"}
                     %span.glyphicon.glyphicon-cloud-upload{"aria-hidden" => "true"}
-                    Import CSV
+                    匯入CSV文件
 
             .table-container
-              %table.table.table-hover.table-filter.search
+              %table.table.table-hover
+              %table#report_lists.table.table-small-font.table-hover.table-filter.search.dt-responsive.infinite-table{:style => "width:100%;"}
                 %thead
                   %tr.filters{style: "background-color: #fcfcfc;"}
                     %th{:style => "width: 4.1%; vertical-align: middle;"}
@@ -49,49 +49,47 @@
                           %span.cr
                             %i.cr-icon.glyphicon.glyphicon-ok
                     %th{:style => "width: 68%; vertical-align: middle;"}
-                      %input.form-control{:disabled => "disabled", :placeholder => "File Name", :type => "text"}
+                      %input.form-control{:disabled => "disabled", :placeholder => "檔案名稱", :type => "text"}
                     %th{:style => "width: 30%; vertical-align: middle;"}
-                      %input.form-control{:disabled => "disabled", :placeholder => "Publish Date", :type => "text"}
-                %tbody
-                  - @files.each do |file|
-                    // Get substring from file_name
-                    - strip_str = file.file_name[0, 8]
-                    %tr{"data-status" => "#{strip_str}", id: "file_row_#{file.id}"}
-                      %td{:style => "width: 4.1%; vertical-align: middle;"}
-                        .ckbox
-                          = check_box_tag "file_ids[]", file.id, false, id: "file_ids_#{file.id}"
-                          %label{:for => "file_ids_#{file.id}"}
-                      %td{:style => "width: 68%; vertical-align: middle;"}
-                        .media
-                          - if strip_str.eql? 'Sum-All'
-                            - color = 'success'
-                          -elsif strip_str.eql? 'Sum-Config'
-                            - color = 'warning'
-                          -elsif strip_str.eql? 'Sum-Main'
-                            - color = 'danger'
-                          -elsif strip_str.eql? 'Sum-Mini'
-                            - color = 'info'
-                          %span.label.pull-right{:style => "vertical-align: middle;", :class => "label-#{color}"}
-                            = strip_str
-                          .media-body
-                            %h4.title
-                              = link_to file.file_name, my_post_yield_file_path(@post, file)
-                            %p.summary
-                              = file.total_row.to_i
-                              rows of records included
-                      %td{:style => "width: 30%;"}
-                        %span.media-meta= file.created_at.to_date.to_formatted_s(:long)
-                        %span#delete-file.pull-right.dont_show
-                          /= link_to '(Delete)', '#', :class => "text-danger", id: "delete-yield-file", "data-file-id" => "#{file.id}", "data-build-id" => "#{file.post.id}"}"
-                          %a#delete-yield-file{"data-build-id" => "#{file.post.id}", "data-file-id" => "#{file.id}", :href => "#"}
-                            %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash.row-remove{"data-toggle" => "tooltip", :title => "Delete"}
+                      %input.form-control{:disabled => "disabled", :placeholder => "文件日期", :type => "text"}
+                = render :partial => "file_items"
           - else
-            %strong.text-danger No file found
+            %strong.text-danger 沒有找到文件
+
+          #paginator
+            = link_to_next_page @files, '載入更多文件', params: params, remote: true
 
 = render :partial => "shared/csv_importer"
 
 :javascript
   $(document).ready(function () {
+    $(window).scroll(function () {
+      more_reports_url = $('#paginator a[rel=next]').attr('href');
+      if (more_reports_url && $(window).scrollTop() > $(document).height() - $(window).height() - 200) {
+        $('#paginator').html('<div class="loading">Loading reports...</div>');
+        $.getScript(more_reports_url);
+      }
+      if ($(this).scrollTop() > 2500) {
+        $('#back-to-top').fadeIn();
+      }
+      else {
+        $('#back-to-top').fadeOut();
+      }
+    });
+    // scroll body to 0px on click
+    $('#back-to-top').click(function () {
+      $('#back-to-top').tooltip('hide');
+      $('body,html').animate({
+        scrollTop: 0
+      }, 800);
+      return false;
+    });    
+    $('#back-to-top').tooltip('show');
+    // Click the Load more report button
+    $('#paginator').click(function () {
+      $('#paginator').html('<div class="loading">正在用力載入資料...</div>');
+    }); 
+
     $('[data-toggle="tooltip"]').tooltip();
 
     var href = $('#delete-all-files').attr('href')

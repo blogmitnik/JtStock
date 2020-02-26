@@ -451,8 +451,8 @@
             = report.closing_percentage
 
           %td.date{:style => "vertical-align: middle;"}
-            %span.glyphicon.glyphicon-time
-            = report.published_at.to_date.to_formatted_s(:long)
+            %span.label.label-default
+              = report.published_at.to_date.strftime('%Y-%m-%d').to_s
 
   :javascript
     jQuery(function() {

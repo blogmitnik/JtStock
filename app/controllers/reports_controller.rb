@@ -154,8 +154,6 @@ class ReportsController < ApplicationController
         @reports_for_cart = @reports_for_cart.where(station_id: @station.id, published_at: date)
         @reports = @reports_for_cart.order("stock_code ASC").page(page)
         @distinct_date = @reports_for_cart.select("distinct(published_at)")
-
-        puts @distinct_date.count
       end
     end
   end
@@ -198,7 +196,6 @@ class ReportsController < ApplicationController
             if file = YieldFile.find_by_file_name(filename)
               count = Report.where(post_id: post, yield_file_id: file).count
 
-              puts count
               # Check if CSV row numbers equal to record numbers that imported to database
               if count + 4 == file.total_row
                 imported_files << file

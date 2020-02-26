@@ -3,7 +3,8 @@ class YieldFilesController < ApplicationController
 
   def index
     @post = Post.find(params[:my_post_id])
-    @files = @post.yield_files.order("published_at DESC")
+    page = (params[:page] || 1).to_i
+    @files = @post.yield_files.order("published_at DESC").page(params[:page]).per(100)
   end
 
   def show

@@ -1,0 +1,34 @@
+%tbody
+  - @files.each do |file|
+    // Get substring from file_name
+    - if file.file_name.to_s.include? "MI-INDEX-"
+      - strip_str = "MI-INDEX"
+    - else
+      - strip_str = "BFIAMU"
+
+    %tr{"data-status" => "#{strip_str}", id: "file_row_#{file.id}"}
+      %td{:style => "width: 4.1%; vertical-align: middle;"}
+        .ckbox
+          = check_box_tag "file_ids[]", file.id, false, id: "file_ids_#{file.id}"
+          %label{:for => "file_ids_#{file.id}"}
+      %td{:style => "width: 68%; vertical-align: middle;"}
+        .media
+          - if strip_str.eql? 'MI-INDEX'
+            - color = 'danger'
+          -elsif strip_str.eql? 'BFIAMU'
+            - color = 'info'
+          %span.label.pull-right{:style => "vertical-align: middle;", :class => "label-#{color}"}
+            = strip_str
+          .media-body
+            %h4.title
+              = link_to file.file_name, my_post_yield_file_path(@post, file)
+            %p.summary
+              包含
+              = file.total_row.to_i
+              筆資料
+      %td{:style => "width: 30%;"}
+        %span.media-meta= file.created_at.to_date.to_formatted_s(:long)
+        %span#delete-file.pull-right.dont_show
+          /= link_to '(Delete)', '#', :class => "text-danger", id: "delete-yield-file", "data-file-id" => "#{file.id}", "data-build-id" => "#{file.post.id}"}"
+          %a#delete-yield-file{"data-build-id" => "#{file.post.id}", "data-file-id" => "#{file.id}", :href => "#"}
+            %button.btn.btn-xs.btn-danger.glyphicon.glyphicon-trash.row-remove{"data-toggle" => "tooltip", :title => "Delete"}

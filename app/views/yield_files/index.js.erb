@@ -1,0 +1,13 @@
+$('#paginator').html('<%= escape_javascript(paginate(@files, :remote => true).to_s) %>');
+$('#paginator-top').html('<%= escape_javascript(paginate(@files, :remote => true).to_s) %>');
+$(".pagination").rPage();
+
+// Append new report data
+$("<%=j render(:partial => 'file_items', :object => @files) %>").appendTo($(".infinite-table"));
+// Update pagination link
+<% if @files.last_page? %>
+  $('.pagination').html("已經到最後面啦！");
+<% else %>
+  //$('#paginator').html('<%= escape_javascript(paginate(@files, :remote => true).to_s) %>');
+  $('#paginator').html('<%= escape_javascript(link_to_next_page(@files, '載入更多文件', params: params, :remote => true).to_s) %>');
+<% end %>

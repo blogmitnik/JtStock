@@ -2,10 +2,10 @@
 
 - navigation_add "Modules", my_posts_path
 - navigation_add @post.title + build_type, my_post_path(@post, build: params[:build])
-- navigation_add @report.station_name, my_post_report_configs_path(@post)
+- navigation_add @station.name, my_post_report_configs_path(@post)
 
 %h2.page-header
-  = @report.station_name
+  = @station.name
   %small 在 #{@report.published_at.to_date.to_formatted_s(:long)} 的證券資料
   
 .row
