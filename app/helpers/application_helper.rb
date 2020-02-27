@@ -1,6 +1,6 @@
 module ApplicationHelper
   def title
-    site_title = "Juice Bear"
+    site_title = "Jt Stock"
     if @title.nil?
       site_title
     else
