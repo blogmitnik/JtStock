@@ -35,7 +35,7 @@
                         .media
                           .media-body
                             %span.media-meta.pull-right
-                              此模組於
+                              於
                               = post.created_at.to_date.to_formatted_s(:long)
                               建立
                             %h4.title
@@ -46,10 +46,13 @@
                                 = link_to '(管理文件)', my_post_yield_files_path(post)
                             %p.summary
                               - if post.reports.count > 0
+                                總共
                                 = @files_count
-                                個 CSV 文件，包含共
+                                個文件，包含
                                 = post.reports.count.to_i
-                                筆資料
+                                筆指數及
+                                = post.mi_reports.count.to_i
+                                筆證券資料
                               - else
                                 沒有資料
                 - else

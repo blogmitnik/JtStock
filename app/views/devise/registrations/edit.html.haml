@@ -1,4 +1,4 @@
-- navigation_add 'Edit Profile', '/users/edit'
+- navigation_add 'Profile', '/users/edit'
 
 %h2
   Edit Profile
@@ -30,13 +30,13 @@
           %label.col-lg-3.control-label
           .col-md-8
             /%button.btn.btn-primary.btn-lg{:type => "submit"} Save Changes
-            = submit_tag 'Save Changes', class: 'btn btn-primary btn-lg tclick', id: 'sendButton', data: { disable_with: "Saving Changes..." }
+            = submit_tag '儲存變更', class: 'btn btn-primary btn-lg tclick', id: 'sendButton', data: { disable_with: "正在儲存..." }
 
     .col-md-3.input-group
-      %h3 Unhappy?
-      %span.help-block Cancel your account now
+      %h3 不再使用服務？
+      %span.help-block 您可以永久刪除帳戶
       /= link_to "Cancel account", registration_path(resource_name), :data => { :confirm => "This is serious monkey business! Are you sure?" }, :method => :delete, class: "btn btn-danger", id: "delete-my-account"
-      = link_to "Cancel account", '#', class: "btn btn-zoomshift", id: "delete-my-account"
+      = link_to "刪除我的帳戶", '#', class: "btn btn-zoomshift", id: "delete-my-account"
 
 :javascript
   $(document).ready(function (){

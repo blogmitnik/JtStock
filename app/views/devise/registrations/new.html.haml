@@ -1,7 +1,7 @@
 - navigation_add 'Sign up', new_registration_path(@user)
 %h2
-  Sign Up
-  %small It's free and always will be
+  註冊帳戶
+  %small 您可以建立免費帳戶
 
 %hr.colorgraph
 
@@ -12,24 +12,24 @@
         .form-group
           = f.label :email, class: "col-lg-3 control-label"
           .col-sm-9
-            = f.email_field :email, class: "form-control input-lg required", id: "email-field", placeholder: "Email"
+            = f.email_field :email, class: "form-control input-lg required", id: "email-field", placeholder: "Email地址"
             %span.help-block Provide your E-mail
         .form-group
           = f.label :password, class: "col-lg-3 control-label"
           .col-sm-9
-            = f.password_field :password, class: "form-control input-lg required", id: "pwd-field", placeholder: "Password"
+            = f.password_field :password, class: "form-control input-lg required", id: "pwd-field", placeholder: "選擇密碼"
             %span.pwstrength_viewport_progress
             %span.help-block Provide password (6 characters or more)
         .form-group
           = f.label :password_confirmation, class: "col-lg-3 control-label"
           .col-sm-9
-            = f.password_field :password_confirmation, class: "form-control input-lg required", id: "confirm-pwd-field", placeholder: "Password Confirm"
+            = f.password_field :password_confirmation, class: "form-control input-lg required", id: "confirm-pwd-field", placeholder: "再次輸入密碼"
             %span.help-block Confirm your password
         .form-group
           %label.col-lg-3.control-label
           .col-md-9
             /%button.btn.btn-lg.btn-info{:type => "submit", :disabled => true} Register
-            = submit_tag 'Register', class: 'btn btn-success btn-lg tclick', id: 'register', data: { disable_with: "Registering..." }
+            = submit_tag '註冊', class: 'btn btn-success btn-lg tclick', id: 'register', data: { disable_with: "正在註冊..." }
             %br
             %br
             = render "links"

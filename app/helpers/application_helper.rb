@@ -1,4 +1,13 @@
 module ApplicationHelper
+  def title
+    site_title = "Juice Bear"
+    if @title.nil?
+      site_title
+    else
+      "#{site_title} | #{@title}"
+    end
+  end
+
   # For breadcrumbs
   def ensure_navigation
     @navigation ||= [ { :title => 'Home', :url => '/' } ]

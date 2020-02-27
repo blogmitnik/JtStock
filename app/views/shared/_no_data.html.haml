@@ -1,0 +1,18 @@
+.alert.alert-danger{ :role => "alert" }
+  %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
+  %a.close{ :href => "#", "data-dismiss" => "alert" } &times;
+  從您選擇的日期，沒有找到任何資料！請用其他日期找找。
+
+:javascript
+  jQuery(function() {
+    var flashCallback;
+    flashCallback = function() {
+      return $(".alert").fadeOut();
+    };
+    $(".alert").bind('click', (function(_this) {
+      return function(ev) {
+        return $(".alert").fadeOut();
+      };
+    })(this));
+    return setTimeout(flashCallback, 3000);
+  });

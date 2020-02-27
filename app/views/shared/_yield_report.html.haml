@@ -25,6 +25,8 @@
             = render :partial => "shared/dropdown_build_selector"
 
   .panel-body
+    #no-data-found
+
     #search-box
       - if controller.controller_name == 'reports' && params[:commit] == "GlobalSearch"
         = render :partial => "shared/global_search_box"
