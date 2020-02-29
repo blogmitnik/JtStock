@@ -1,0 +1,1 @@
+(function(){$(document).on("page:change",function(){var A;return A=new Date,$.datepicker.setDefaults({dateFormat:"yy-mm-dd",minDate:new Date(2016,1,1),maxDate:new Date(A.getFullYear()+1,A.getMonth(),A.getDate()(-1))}),$(".datepicker").datepicker()})}).call(this);

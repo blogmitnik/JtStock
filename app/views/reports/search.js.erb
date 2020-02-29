@@ -32,6 +32,8 @@
 		//$('#paginator').html('<%= escape_javascript(paginate(@reports, :remote => true).to_s) %>');
 		$('#paginator').html('<%= escape_javascript(link_to_next_page(@reports, '載入更多資料', params: params, :remote => true).to_s) %>');
 	<% end %>
+
+	$("#chart-graph").fadeTo("fast", 1.0);
 <% else %>
 	$('#no-data-found').html("<%= j(render :partial => 'shared/no_data') %>");
 
@@ -40,4 +42,6 @@
 	$('#tab-selector').html("<%= j(render :partial => 'shared/tab_selector') %>");
 
 	$('#yield-items').html("<%= j(render :partial => 'shared/yield_items') %>");
+
+	$("#chart-graph").fadeTo("fast", 0.3);
 <% end %>

@@ -236,8 +236,8 @@
               = report.closing_percentage
 
             %td.date{:style => "vertical-align: middle;"}
-              %span.glyphicon.glyphicon-time
-              = report.published_at.to_date.to_formatted_s(:long)
+              %span.label.label-default
+                = report.published_at.to_date.to_formatted_s(:long)
 
         - @reports_summarize.each_with_index do |(idx, data), index|
           %tr.summarize_table_date

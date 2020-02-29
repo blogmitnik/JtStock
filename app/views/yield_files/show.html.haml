@@ -15,7 +15,10 @@
           = "快速預覽文件"
         .panel-body
           #yield-items
-            = render :partial => "shared/yield_items"
+            - if @file.file_name.include? "MI-INDEX"
+              = render :partial => "configs/config_items"
+            - else
+              = render :partial => "shared/yield_items"
         .panel-footer
           .row
             .col.col-xs-4

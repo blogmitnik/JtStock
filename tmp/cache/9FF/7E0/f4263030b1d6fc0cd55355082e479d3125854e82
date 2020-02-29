@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624714.852452:@value"5[I"'(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898666.607424:@value"5[I"'(function() {
   window.ActiveAdmin.DropdownMenu = ActiveAdmin.DropdownMenu = (function() {
     function DropdownMenu(options, element) {
       var defaults;

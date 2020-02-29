@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624715.8064132:@value"õ[I"ç/**
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898667.204768:@value"õ[I"ç/**
  * This type-detection plug-in will look at an HTML string from a data cell,
  * strip the HTML tags and then check to see if the remaining data is numeric.
  * If it is, then the data can be sorted numerically with the Numbers with HTML

@@ -29,7 +29,7 @@
                           = check_box_tag "post_ids[]", post.id, false, id: "post_ids_#{post.id}"
                           %label{for: "post_ids_#{post.id}"}
                       %td{style: "vertical-align: middle;"}
-                        %a.star{href: "javascript:;", "data-toggle" => "tooltip", title: "No function yet"}
+                        %a.star{href: "javascript:;", "data-toggle" => "tooltip", title: "給你按爽的，目前無作用"}
                           %i.glyphicon.glyphicon-star
                       %td
                         .media
@@ -46,9 +46,11 @@
                                 = link_to '(管理文件)', my_post_yield_files_path(post)
                             %p.summary
                               - if post.reports.count > 0
-                                總共
+                                共
                                 = @files_count
-                                個文件，包含
+                                個文件
+                                %br
+                                包含
                                 = post.reports.count.to_i
                                 筆指數及
                                 = post.mi_reports.count.to_i

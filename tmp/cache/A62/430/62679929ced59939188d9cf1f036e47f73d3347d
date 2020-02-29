@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624714.361512:@value"^[I"P(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898666.373682:@value"^[I"P(function() {
   $(document).on('page:change', function() {
     var d;
     d = new Date();

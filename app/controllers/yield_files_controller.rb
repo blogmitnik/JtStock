@@ -11,13 +11,20 @@ class YieldFilesController < ApplicationController
     @post = Post.find(params[:my_post_id])
     @file = @post.yield_files.find_by_id(params[:id])
     if @file
-      @reports = @post.reports.where(yield_file_id: @file).order("station_id ASC").page(params[:page])
+      if @file.file_name.include? "MI-INDEX"
+        @station_id = @file.file_name[9, 2].to_i
+        @reports = @post.mi_reports.where(station_id: @station_id, yield_file_id: @file).order("station_id ASC").page(params[:page]).per(100)
+        puts @station_id
+        puts @reports.count
+      else
+        @reports = @post.reports.where(yield_file_id: @file).order("station_id ASC").page(params[:page])
+      end
     end
   end
 
   def destroy
     @post = Post.find(params[:my_post_id])
-    @reports = @post.reports.order("published_at ASC").page(params[:page])
+    #@reports = @post.mi_reports.order("published_at ASC").page(params[:page])
   	@file = @post.yield_files.find(params[:id])
     @file.destroy
     respond_to do |format|

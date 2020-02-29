@@ -20,11 +20,15 @@
           %span.label.pull-right{:style => "vertical-align: middle;", :class => "label-#{color}"}
             = strip_str
           .media-body
-            %h4.title
-              = link_to file.file_name, my_post_yield_file_path(@post, file)
             %p.summary
-              包含
-              = file.total_row.to_i
+              =file.file_name
+              /= link_to file.file_name, my_post_yield_file_path(@post, file)
+            %small
+              共
+              - if file.file_name.to_s.include? "MI-INDEX-"
+                = file.total_row.to_i - 7
+              - else
+                = file.total_row.to_i - 4
               筆資料
       %td{:style => "width: 30%;"}
         %span.media-meta= file.created_at.to_date.to_formatted_s(:long)

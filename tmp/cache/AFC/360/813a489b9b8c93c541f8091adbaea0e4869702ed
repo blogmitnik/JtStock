@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624713.3170612:@value"³[I"¦jQuery(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898665.8906639:@value"³[I"¦jQuery(function() {
   jQuery(document).on('ajaxStart', function() { NProgress.start(); });
   jQuery(document).on('ajaxStop',  function() { NProgress.done();  });
 });

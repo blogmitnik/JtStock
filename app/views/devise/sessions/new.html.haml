@@ -10,9 +10,9 @@
     = f.label :password, "登入密碼", class: "sr-only"
     = f.password_field :password, class: "form-control required", id: "formGroupInputLarge pwd-field", placeholder: "你的密碼"
     - if devise_mapping.rememberable?
-      .checkbox
-        %label{:for => "user_remember_me"}
-          = f.check_box :remember_me
+      .ckbox{:style => "margin-left:0px;"}
+        = f.check_box :remember_me
+        %label{:for => "user_remember_me", :style => "margin-left:5px;"}
           記住我
     %button.btn.btn-lg.btn-success.btn-block{:type => "submit"} 登入帳戶
     %br

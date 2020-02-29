@@ -11,14 +11,14 @@
     - if params[:date].nil? && params[:date_range].nil? && params[:to_date].nil? && params[:date1].nil? && params[:date2].nil? && params[:date3].nil? && params[:station].nil?
       %li.active{:role => "presentation"}
         %a.date_select_tab{:href => url_for(:controller => controller.controller_name, :action => controller.action_name, :date => 'today', :from_station => params[:from_station], :build => params[:build])}
-          %span.glyphicon.glyphicon-tag
+          %span.glyphicon.glyphicon-list
           分類指數總覽
           - if current_page?(:controller => controller.controller_name, :action => controller.action_name, :page => params[:page], :build => params[:build])
             %span.badge= @reports_for_cart.count.to_i
     - else
       %li{:role => "presentation", :class => active_class(:controller => controller.controller_name, :action => controller.action_name, :date => 'today', :data_period => params[:data_period], :from_station => params[:from_station], :page => params[:page], :build => params[:build])}
         %a.date_select_tab{:href => url_for(:controller => controller.controller_name, :action => controller.action_name, :from_station => params[:from_station], :date => 'today', :build => params[:build])}
-          %span.glyphicon.glyphicon-tag
+          %span.glyphicon.glyphicon-list
           分類指數總覽
           - if current_page?(:controller => controller.controller_name, :action => controller.action_name, :date => 'today', :data_period => params[:data_period], :from_station => params[:from_station], :page => params[:page], :build => params[:build])
             %span.badge= @reports_for_cart.count.to_i

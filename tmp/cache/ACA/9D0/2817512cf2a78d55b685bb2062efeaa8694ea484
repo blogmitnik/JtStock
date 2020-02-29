@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624715.3735108:@value"­[I"Ÿ(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898666.703269:@value"­[I"Ÿ(function() {
   jQuery(function($) {
     $(document).delegate("#batch_actions_selector li a", "click.rails", function() {
       $("#batch_action").val($(this).attr("data-action"));

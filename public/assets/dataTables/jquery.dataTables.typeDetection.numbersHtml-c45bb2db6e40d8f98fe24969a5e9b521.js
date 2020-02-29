@@ -1,0 +1,1 @@
+jQuery.fn.dataTableExt.aTypes.unshift(function(A){A="function"==typeof A.replace?A.replace(/<[\s\S]*?>/g,""):A,A=$.trim(A);var t,e="0123456789-",i="0123456789.",n=!1;if(t=A.charAt(0),-1==e.indexOf(t))return null;for(var r=1;r<A.length;r++){if(t=A.charAt(r),-1==i.indexOf(t))return null;if("."==t){if(n)return null;n=!0}}return"num-html"});

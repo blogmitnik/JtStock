@@ -1,0 +1,1 @@
+jQuery.fn.dataTableExt.oApi.fnFilterOnReturn=function(){var A=this;return this.each(function(t){$.fn.dataTableExt.iApiIndex=t;var e=$("input",A.fnSettings().aanFeatures.f);return e.unbind("keyup").bind("keypress",function(i){13==i.which&&($.fn.dataTableExt.iApiIndex=t,A.fnFilter(e.val()))}),this}),this};

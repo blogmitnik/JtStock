@@ -1,4 +1,4 @@
-o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582624714.6822588:@value"É[I"»(function() {
+o: ActiveSupport::Cache::Entry	:@compressedF:@expires_in0:@created_atf1582898666.571415:@value"É[I"»(function() {
   window.ActiveAdmin.CheckboxToggler = ActiveAdmin.CheckboxToggler = (function() {
     function CheckboxToggler(options, container) {
       var defaults;

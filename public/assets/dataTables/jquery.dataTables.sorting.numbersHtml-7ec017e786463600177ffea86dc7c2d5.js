@@ -1,0 +1,1 @@
+jQuery.extend(jQuery.fn.dataTableExt.oSort,{"num-html-pre":function(A){var t=String(A).replace(/<[\s\S]*?>/g,"");return parseFloat(t)},"num-html-asc":function(A,t){return t>A?-1:A>t?1:0},"num-html-desc":function(A,t){return t>A?1:A>t?-1:0}});
