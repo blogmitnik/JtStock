@@ -1,2 +1,2 @@
 # JtStock
-Sample Project
+It's just a side project :)
