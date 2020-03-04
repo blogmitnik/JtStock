@@ -12,10 +12,10 @@
         %tr
           %th 順序
           %th 分類指數
-          %th 最大股數百分比
-          %th 最小股數百分比
-          %th 最大成交百分比
-          %th 最小成交百分比        
+          %th 最大股數百分比 (日期)
+          %th 最小股數百分比 (日期)
+          %th 最大成交百分比 (日期)
+          %th 最小成交百分比 (日期)  
       %tbody
         - @reports_summarize.each_with_index do |data, index|
           %tr
@@ -27,22 +27,22 @@
             %td{:style => "vertical-align: middle;"}
               = data.best_sp
               %span.label.label-danger{"data-content" => "#{@best_sp_dates[index].map{|item| item.published_at.to_date.to_formatted_s(:long)}.join(' 及 ')}", "title" => "#{data.best_sp}% 在#{@best_sp_dates[index].count}個日期中出現", "data-toggle" => "popover", "data-trigger" => "hover", "data-placement" => "bottom"}
-                = @best_sp_dates[index].last.published_at.to_date.to_formatted_s(:long)
+                = @best_sp_dates[index].last.published_at.strftime('%Y-%m-%d').to_s
 
             %td{:style => "vertical-align: middle;"}
               = data.worst_sp
               %span.label.label-success{"data-content" => "#{@worst_sp_dates[index].map{|item| item.published_at.to_date.to_formatted_s(:long)}.join(' 及 ')}", "title" => "#{data.worst_sp}% 在#{@worst_sp_dates[index].count}個日期中出現", "data-toggle" => "popover", "data-trigger" => "hover", "data-placement" => "bottom"}
-                = @worst_sp_dates[index].last.published_at.to_date.to_formatted_s(:long)
+                = @worst_sp_dates[index].last.published_at.strftime('%Y-%m-%d').to_s
 
             %td{:style => "vertical-align: middle;"}
               = data.best_cp
               %span.label.label-danger{"data-content" => "#{@best_cp_dates[index].map{|item| item.published_at.to_date.to_formatted_s(:long)}.join(' 及 ')}", "title" => "#{data.best_cp}% 在#{@best_cp_dates[index].count}個日期中出現", "data-toggle" => "popover", "data-trigger" => "hover", "data-placement" => "bottom"}
-                = @best_cp_dates[index].last.published_at.to_date.to_formatted_s(:long)
+                = @best_cp_dates[index].last.published_at.strftime('%Y-%m-%d').to_s
 
             %td{:style => "vertical-align: middle;"}
               = data.worst_cp
               %span.label.label-success{"data-content" => "#{@worst_cp_dates[index].map{|item| item.published_at.to_date.to_formatted_s(:long)}.join(' 及 ')}", "title" => "#{data.worst_cp}% 在#{@worst_cp_dates[index].count}個日期中出現", "data-toggle" => "popover", "data-trigger" => "hover", "data-placement" => "bottom"}
-                = @worst_cp_dates[index].last.published_at.to_date.to_formatted_s(:long)
+                = @worst_cp_dates[index].last.published_at.strftime('%Y-%m-%d').to_s
 
     :javascript
       jQuery(function() {

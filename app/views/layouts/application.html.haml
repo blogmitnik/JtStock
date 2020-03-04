@@ -4,11 +4,7 @@
     %meta{ :charset => "utf-8" }
     %title
       =title
-    = stylesheet_link_tag "application", :media => "all", "data-turbolinks-track" => true
-    /%link{:href => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css", :rel => "stylesheet"}
-    /%script{:src => "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js", :type => "text/javascript"}
-    /= javascript_include_tag "bootstrap", "data-turbolinks-track" => true
-    
+    = stylesheet_link_tag "application", :media => "all", "data-turbolinks-track" => true    
     %link{:href => "/assets/bootstrap.css", :rel => "stylesheet"}
     %script{:src => "/assets/bootstrap.js", :type => "text/javascript"}
     = javascript_include_tag "application", "data-turbolinks-track" => true
@@ -66,6 +62,25 @@
                     //%span.badge 99+
                     %span.glyphicon.glyphicon-bell
                     Notif
+
+    .bnsswX
+      %svg.beansBoxes{:height => "644", :width => "351"}
+        %g{:fill => "none", :transform => "translate(-293 -626)"}
+          %g.coffee-beans
+            %path{:d => "M469.011 933.514l151.157 109.58c18.545 13.445 22.68 39.378 9.236 57.923l-109.58 151.157c-13.445 18.545-39.377 22.68-57.923 9.236l-151.157-109.58c-18.545-13.444-22.68-39.377-9.236-57.923l109.58-151.157c13.445-18.545 39.378-22.68 57.923-9.236z", :fill => "#8D7047", :opacity => "0.084"}
+            %path{:d => "M541.097 1076.706c-9.112 2.303-19.152-6.336-22.426-19.293-3.274-12.958 1.456-25.328 10.567-27.631l11.859 46.924zm3.52-.89c9.11-2.303 13.842-14.673 10.565-27.63-3.276-12.958-13.314-21.595-22.423-19.294l11.859 46.925zm-2.18 49.362c-5.926-7.293-2.321-20.038 8.05-28.468 10.37-8.43 23.585-9.347 29.511-2.054l-37.56 30.522zm2.29 2.807c5.927 7.294 19.152 6.373 29.51-2.054s13.978-21.174 8.052-28.468l-37.561 30.522z", :fill => "#5A4528", :opacity => "0.617"}
+          %rect{:fill => "#8D7047", :height => "141", :opacity => "0.084", :rx => "21.678", :transform => "rotate(35.94 553.5 716.5)", :width => "141", :x => "483", :y => "646"}
+      %svg.cup{:height => "298", :width => "357"}
+        %g{:fill => "none", :transform => "translate(-5 -21)"}
+          %path{:d => "M236.886 36.239l99.133 71.905c27.452 19.906 33.573 58.295 13.674 85.751l-71.853 99.197c-19.903 27.462-58.3 33.59-85.761 13.687a41.981 41.981 0 01-.013-.01l-99.124-71.918c-27.451-19.906-33.573-58.295-13.674-85.751l71.854-99.197c19.902-27.461 58.299-33.59 85.76-13.686l.013.009zM54.269 51.238l37.72 27.357c6.029 4.372 7.373 12.803 3.003 18.833L67.65 135.166c-4.371 6.032-12.804 7.378-18.836 3.006 0 0-.002 0-.003-.002l-37.717-27.359C5.064 106.44 3.72 98.008 8.09 91.978L35.432 54.24c4.372-6.032 12.805-7.378 18.836-3.006l.003.002zM122.142 23.174l11.264 8.17a8.253 8.253 0 011.837 11.525L127.08 54.14a8.253 8.253 0 01-11.528 1.838l-11.262-8.172a8.253 8.253 0 01-1.837-11.524l8.163-11.271a8.253 8.253 0 0111.526-1.84l.002.002z", :fill => "#8D7047", :opacity => "0.08"}
+          %ellipse{:cx => "217.408", :cy => "174.672", :fill => "#DBD2C6", :rx => "91.021", :ry => "91.046"}
+          %path{:d => "M104.522 206.272l27.38-10.554c5.122-1.973 10.873.579 12.847 5.7v.002l.006.024c1.973 5.121-.58 10.872-5.7 12.846l-27.38 10.555c-5.121 1.974-10.873-.578-12.847-5.7v-.002l-.006-.024c-1.972-5.121.58-10.872 5.7-12.845z", :fill => "#DBD2C6"}
+          %ellipse{:cx => "214.875", :cy => "167.5", :fill => "#FFF", :rx => "91.021", :ry => "91.046"}
+          %ellipse{:cx => "214.875", :cy => "167.5", :fill => "#37240C", :opacity => "0.533", :rx => "74.635", :ry => "74.656"}
+          %ellipse{:cx => "215.466", :cy => "166.685", :fill => "#5A4528", :opacity => "0.964", :rx => "66.758", :ry => "66.776"}
+          %path{:d => "M202.728 232.233c-36.19-7.036-59.827-42.087-52.792-78.288 7.034-36.2 42.076-59.85 78.27-52.809", :fill => "#968875", :opacity => "0.496"}
+          %path{:d => "M101.989 199.097l27.38-10.554c5.121-1.973 10.873.578 12.847 5.7v.002l.006.024c1.973 5.121-.58 10.872-5.7 12.846l-27.38 10.555c-5.121 1.973-10.873-.578-12.847-5.7v-.002l-.006-.024c-1.972-5.121.58-10.872 5.7-12.846z", :fill => "#FFF"}
+
     .container
       .media
         - flash.each do |key, message|
@@ -80,9 +95,11 @@
               %span.glyphicon.glyphicon-exclamation-sign{"aria-hidden" => "true"}
               %a.close{ :href => "#", "data-dismiss" => "alert" } &times;
               = message
+
       /Indicate the current page's location within a navigational hierarchy
       - unless current_page?("/oauth/authorized_applications")
         = render_navigation
+
       = yield
       =render 'shared/footer'
 
