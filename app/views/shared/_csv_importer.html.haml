@@ -4,9 +4,12 @@
       .modal-header
         %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
           %span{"aria-hidden" => "true"} &times;
-        %h4.modal-title 手動匯入CSV文件
+        %h4.modal-title 匯入CSV文件
 
       .modal-body
+        %ul.list-group
+          %li.list-group-item.list-group-item-warning 此功能僅在開發階段使用，系統每天會自動抓取指數和證券資料，您無須手動操作！
+
         %ul.nav.nav-pills.mb-3{:role => "tablist"}
           %li.active{:role => "presentation"}
             %a{"aria-controls" => "bfiamu-import-tab", "data-toggle" => "pill", :href => "#bfiamu-import-tab", :role => "tab"}
@@ -17,7 +20,7 @@
 
         .tab-content
           #bfiamu-import-tab.tab-pane.fade.in.active{:role => "tabpanel"}
-            %h5 請從本地端目錄選取CSV文件
+            %h4 請從本地端目錄選取CSV文件
             %p.text-danger *欲匯入[指數資料]，請從台灣證券交易所網站，下載CSV格式文件到你的文件夾裡，然後選取檔名格式為"YYYYMMDD.csv"的文件（例如：20200226.csv），或是選取一個包含所有正確格式CSV文件的整個文件夾，來批次匯入多個文件 (後者僅支持Chrome)
             #import-yield-report
               = render :partial => "shared/import_form"

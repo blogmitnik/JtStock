@@ -9,7 +9,7 @@ gem 'unicorn'
 gem 'whenever', :require => false
 gem 'activerecord-import'
 gem 'parallel'
-
+gem 'puma'
 gem 'houston'
 gem 'gcm'
 gem 'jwt'
